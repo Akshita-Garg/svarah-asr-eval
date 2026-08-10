@@ -1,0 +1,22 @@
+# Python virtual environment
+.venv/
+
+# Secrets
+.env
+
+# Python-generated files
+__pycache__/
+*.py[cod]
+
+# Test and coverage output
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Evaluation files that can be regenerated
+cache/
+data/prepared/
+
+# Editor and operating-system files
+.DS_Store
+Thumbs.db
