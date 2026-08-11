@@ -1,0 +1,79 @@
+{
+  "git": {
+    "commit": "7e2115431608a0a5be0d19ef27ab400a6546879c",
+    "dirty": true
+  },
+  "dataset": {
+    "name": "ai4bharat/Svarah",
+    "revision": "ebbf7777fe771490696a3f7b007097606fa8c924",
+    "split": "test",
+    "seed": 42,
+    "subset_size": 200,
+    "debug": false
+  },
+  "python": {
+    "version": "3.12.13",
+    "implementation": "CPython"
+  },
+  "dependencies": {
+    "datasets": "5.0.1",
+    "jiwer": "4.0.0",
+    "numpy": "2.5.2",
+    "sherpa-onnx": "1.13.4",
+    "sherpa-onnx-core": "1.13.4",
+    "soundfile": "0.14.0",
+    "soxr": "1.1.0",
+    "whisper-normalizer": "0.1.15",
+    "requests": "2.34.2"
+  },
+  "platform": {
+    "system": "Windows",
+    "release": "11",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 140 Stepping 1, GenuineIntel",
+    "cpu_count": 8
+  },
+  "backends": {
+    "voicerefine_whisper_tiny_int8": {
+      "backend_id": "voicerefine_whisper_tiny_int8",
+      "type": "whisper_sherpa",
+      "precision": "int8",
+      "num_threads": 4,
+      "language": "en",
+      "task": "transcribe",
+      "decoding_method": "greedy_search",
+      "tail_paddings": -1,
+      "provider": "cpu",
+      "model_hashes": {
+        "tiny.en-encoder.int8.onnx": "0ce578b827c94a961aacb8fa14b02f096504b337e5c94be37c36238cbe3e8bc6",
+        "tiny.en-decoder.int8.onnx": "06c0e6ff6348d427e51839219d1c886c18cfdf411e629e33f5e1679bff9c1527",
+        "tiny.en-tokens.txt": "306cd27f03c1a714eca7108e03d66b7dc042abe8c258b44c199a7ed9838dd930"
+      }
+    },
+    "voicerefine_parakeet_q4": {
+      "backend_id": "voicerefine_parakeet_q4",
+      "type": "crispasr_server",
+      "backend": "parakeet",
+      "language": "en",
+      "hashes": {
+        "model": "1a60f6e53e5781240dde6e69a47a47a8a71995a3a106517b009225afcc514457",
+        "bin": "3cacd6f6b1ca0de7c7420d33ffb5c0f162240a6278efcc81ae43f119f94314f0"
+      }
+    },
+    "elevenlabs_scribe_v2": {
+      "backend_id": "elevenlabs_scribe_v2",
+      "type": "elevenlabs",
+      "model_id": "scribe_v2",
+      "language_code": "eng",
+      "diarize": false,
+      "tag_audio_events": false
+    }
+  },
+  "timing": {
+    "started_at": "2026-08-11T15:03:10.404281+00:00",
+    "completed_at": "2026-08-11T15:19:01.024018+00:00"
+  },
+  "cache": {
+    "enabled": true
+  }
+}

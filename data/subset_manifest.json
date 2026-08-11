@@ -1,0 +1,1429 @@
+{
+  "dataset": "ai4bharat/Svarah",
+  "split": "test",
+  "revision": "ebbf7777fe771490696a3f7b007097606fa8c924",
+  "seed": 42,
+  "subset_size": 200,
+  "total_rows": 6656,
+  "schema": {
+    "audio_field": "audio_filepath",
+    "transcript_field": "text",
+    "id_field": "audio_filepath",
+    "duration_field": "duration",
+    "column_names": [
+      "audio_filepath",
+      "duration",
+      "text",
+      "gender",
+      "age-group",
+      "primary_language",
+      "native_place_state",
+      "native_place_district",
+      "highest_qualification",
+      "job_category",
+      "occupation_domain"
+    ]
+  },
+  "entries": [
+    {
+      "eval_id": "svarah_test_0000",
+      "row_index": 26,
+      "reference": "English breaks the communication barriers between people of diverse cultural backgrounds and it creates a new community where people come together and share their cultures and ideas with broader audience.",
+      "source_id": "281474976887664_f1766_chunk_0.wav",
+      "duration_seconds": 14.646375
+    },
+    {
+      "eval_id": "svarah_test_0001",
+      "row_index": 53,
+      "reference": "The radiation, the chemotherapy, everything, every every option for cancer treatment is available over here and it is largely used not only by the people of Gujarat but also by the nearby states.",
+      "source_id": "281474976887086_f1867_chunk_6.wav",
+      "duration_seconds": 14.36525
+    },
+    {
+      "eval_id": "svarah_test_0002",
+      "row_index": 94,
+      "reference": "We differ from other countries in terms of food, in terms of dress",
+      "source_id": "281474976884267_f1694_chunk_0.wav",
+      "duration_seconds": 4.778375
+    },
+    {
+      "eval_id": "svarah_test_0003",
+      "row_index": 204,
+      "reference": "Can you list all the Paid vaccination centres for age group 18+ years in district Chatra",
+      "source_id": "281474976895893_f320_chunk_0.wav",
+      "duration_seconds": 6.9871875
+    },
+    {
+      "eval_id": "svarah_test_0004",
+      "row_index": 217,
+      "reference": "39",
+      "source_id": "281474976894934_f1676_chunk_2.wav",
+      "duration_seconds": 1.100875
+    },
+    {
+      "eval_id": "svarah_test_0005",
+      "row_index": 244,
+      "reference": "Clear all the reminders set up last Year",
+      "source_id": "281474976885777_f1381_chunk_0.wav",
+      "duration_seconds": 2.8891875
+    },
+    {
+      "eval_id": "svarah_test_0006",
+      "row_index": 260,
+      "reference": "A few tributaries form marshy land in early dry season due to natural seepage",
+      "source_id": "281474976883956_f1029_chunk_0.wav",
+      "duration_seconds": 5.5070625
+    },
+    {
+      "eval_id": "svarah_test_0007",
+      "row_index": 262,
+      "reference": "Time",
+      "source_id": "281474976893689_f2693_chunk_0.wav",
+      "duration_seconds": 0.500875
+    },
+    {
+      "eval_id": "svarah_test_0008",
+      "row_index": 355,
+      "reference": "So, starting with Maghi Chakrati, on Maghi Chakrati which",
+      "source_id": "281474976888873_f2272_chunk_4.wav",
+      "duration_seconds": 5.400125
+    },
+    {
+      "eval_id": "svarah_test_0009",
+      "row_index": 375,
+      "reference": "change the color of the lights to blue",
+      "source_id": "281474976893671_f3064_chunk_0.wav",
+      "duration_seconds": 2.5359375
+    },
+    {
+      "eval_id": "svarah_test_0010",
+      "row_index": 385,
+      "reference": "Three",
+      "source_id": "281474976895412_f1595_chunk_0.wav",
+      "duration_seconds": 0.3116875
+    },
+    {
+      "eval_id": "svarah_test_0011",
+      "row_index": 458,
+      "reference": "Agree",
+      "source_id": "281474976893967_f2860_chunk_0.wav",
+      "duration_seconds": 0.5161875
+    },
+    {
+      "eval_id": "svarah_test_0012",
+      "row_index": 520,
+      "reference": "How is the availability of healthcare professionals in your state?",
+      "source_id": "281474976893058_f2158_chunk_0.wav",
+      "duration_seconds": 4.29825
+    },
+    {
+      "eval_id": "svarah_test_0013",
+      "row_index": 542,
+      "reference": "I am trying to search for ESIC Centres with centre type Local Office",
+      "source_id": "281474976901121_f2797_chunk_0.wav",
+      "duration_seconds": 4.952875
+    },
+    {
+      "eval_id": "svarah_test_0014",
+      "row_index": 569,
+      "reference": "Help",
+      "source_id": "281474976901773_f2590_chunk_0.wav",
+      "duration_seconds": 0.36425
+    },
+    {
+      "eval_id": "svarah_test_0015",
+      "row_index": 584,
+      "reference": "my other favorite herbs are tulsi, pudina, dodapathre and vandalaga, tulsi as we all know is a very good medicinal plant or herb that can be used in treating common cold and cough",
+      "source_id": "281474976884628_f2121_chunk_3.wav",
+      "duration_seconds": 13.936125
+    },
+    {
+      "eval_id": "svarah_test_0016",
+      "row_index": 645,
+      "reference": "where I was trained physical, mental and spiritual",
+      "source_id": "281474976897457_f2033_chunk_4.wav",
+      "duration_seconds": 5.1123125
+    },
+    {
+      "eval_id": "svarah_test_0017",
+      "row_index": 653,
+      "reference": "because",
+      "source_id": "281474976893082_f1927_chunk_2.wav",
+      "duration_seconds": 0.6903125
+    },
+    {
+      "eval_id": "svarah_test_0018",
+      "row_index": 712,
+      "reference": "Manas",
+      "source_id": "281474976897459_f2145_chunk_8.wav",
+      "duration_seconds": 0.8333125
+    },
+    {
+      "eval_id": "svarah_test_0019",
+      "row_index": 744,
+      "reference": "As for my opinion, there are not",
+      "source_id": "281474976892338_f2196_chunk_1.wav",
+      "duration_seconds": 3.345375
+    },
+    {
+      "eval_id": "svarah_test_0020",
+      "row_index": 759,
+      "reference": "The biking is booming. The demand is increasing, just because they are way cheaper than the cars. And it is environment-friendly, too",
+      "source_id": "281474976895427_f1809_chunk_3.wav",
+      "duration_seconds": 11.10175
+    },
+    {
+      "eval_id": "svarah_test_0021",
+      "row_index": 767,
+      "reference": "entire world interconnected.",
+      "source_id": "281474976888914_f3259_chunk_18.wav",
+      "duration_seconds": 4.96
+    },
+    {
+      "eval_id": "svarah_test_0022",
+      "row_index": 792,
+      "reference": "it It is funded by state government, UCSH",
+      "source_id": "281474976934183_f3307_chunk_0.wav",
+      "duration_seconds": 6.0
+    },
+    {
+      "eval_id": "svarah_test_0023",
+      "row_index": 827,
+      "reference": "I also like Levi Skrull's Alice in Wonderland.",
+      "source_id": "281474976894273_f3279_chunk_11.wav",
+      "duration_seconds": 3.24
+    },
+    {
+      "eval_id": "svarah_test_0024",
+      "row_index": 837,
+      "reference": "Mute my reminders for a day!",
+      "source_id": "281474976885326_f18_chunk_0.wav",
+      "duration_seconds": 2.1295625
+    },
+    {
+      "eval_id": "svarah_test_0025",
+      "row_index": 839,
+      "reference": "Find all blood banks with A- blood in district Warangal",
+      "source_id": "281474976884157_f1278_chunk_0.wav",
+      "duration_seconds": 6.3609375
+    },
+    {
+      "eval_id": "svarah_test_0026",
+      "row_index": 871,
+      "reference": "For people of age group 18+ years is there any Free vaccination centre available in district Jaipur which provides First Dose",
+      "source_id": "281474976886979_f1251_chunk_0.wav",
+      "duration_seconds": 10.6785
+    },
+    {
+      "eval_id": "svarah_test_0027",
+      "row_index": 898,
+      "reference": "Start a new email to George Brown",
+      "source_id": "281474976887186_f2991_chunk_0.wav",
+      "duration_seconds": 2.799625
+    },
+    {
+      "eval_id": "svarah_test_0028",
+      "row_index": 912,
+      "reference": "farming",
+      "source_id": "281474976900335_f1966_chunk_3.wav",
+      "duration_seconds": 0.591625
+    },
+    {
+      "eval_id": "svarah_test_0029",
+      "row_index": 913,
+      "reference": "Chandrashekhar Jha",
+      "source_id": "281474976888145_f1900_chunk_4.wav",
+      "duration_seconds": 1.113
+    },
+    {
+      "eval_id": "svarah_test_0030",
+      "row_index": 938,
+      "reference": "I love doing nature photography.",
+      "source_id": "281474976897307_f3234_chunk_18.wav",
+      "duration_seconds": 3.16
+    },
+    {
+      "eval_id": "svarah_test_0031",
+      "row_index": 1022,
+      "reference": "That if someone speaks in English, then he is literate. We can justify that, we can judge that.",
+      "source_id": "281474976889906_f3211_chunk_4.wav",
+      "duration_seconds": 5.85925
+    },
+    {
+      "eval_id": "svarah_test_0032",
+      "row_index": 1133,
+      "reference": "Also music has a very",
+      "source_id": "281474976884634_f2217_chunk_9.wav",
+      "duration_seconds": 3.72025
+    },
+    {
+      "eval_id": "svarah_test_0033",
+      "row_index": 1143,
+      "reference": "Three",
+      "source_id": "281474976897873_f1662_chunk_0.wav",
+      "duration_seconds": 0.31
+    },
+    {
+      "eval_id": "svarah_test_0034",
+      "row_index": 1170,
+      "reference": "Padma",
+      "source_id": "281474976893988_f2006_chunk_3.wav",
+      "duration_seconds": 0.430625
+    },
+    {
+      "eval_id": "svarah_test_0035",
+      "row_index": 1252,
+      "reference": "The scenes of the movie of John Abraham riding the Suzuki Hayabusa It made me fall in love with biking",
+      "source_id": "281474976885096_f2239_chunk_1.wav",
+      "duration_seconds": 6.6386875
+    },
+    {
+      "eval_id": "svarah_test_0036",
+      "row_index": 1273,
+      "reference": "and hoping that one of them would turn out good",
+      "source_id": "281474976896992_f1780_chunk_2.wav",
+      "duration_seconds": 2.7684375
+    },
+    {
+      "eval_id": "svarah_test_0037",
+      "row_index": 1295,
+      "reference": "The price mentioned for National Gardens Potted Tomato Seeds is not correct as compare to market prices.",
+      "source_id": "281474976885773_f1228_chunk_0.wav",
+      "duration_seconds": 8.4615
+    },
+    {
+      "eval_id": "svarah_test_0038",
+      "row_index": 1307,
+      "reference": "And so difficult to say a favorite particular favorite quote",
+      "source_id": "281474976893169_f3301_chunk_4.wav",
+      "duration_seconds": 6.52
+    },
+    {
+      "eval_id": "svarah_test_0039",
+      "row_index": 1310,
+      "reference": "the religion, or the community, or the race that they belong to,",
+      "source_id": "281474976884085_f3239_chunk_23.wav",
+      "duration_seconds": 5.48
+    },
+    {
+      "eval_id": "svarah_test_0040",
+      "row_index": 1332,
+      "reference": "Tennis courts have been built for youngsters to learn the sport.",
+      "source_id": "281474976894271_f3141_chunk_15.wav",
+      "duration_seconds": 3.5300625
+    },
+    {
+      "eval_id": "svarah_test_0041",
+      "row_index": 1338,
+      "reference": "yes it caters different need and different sectors for example, hospitality, agriculture",
+      "source_id": "281474976887083_f2168_chunk_3.wav",
+      "duration_seconds": 7.043
+    },
+    {
+      "eval_id": "svarah_test_0042",
+      "row_index": 1401,
+      "reference": "It celebrates the occasion on two days, that is 15th and 16th of August. The festivity is held on such a large scale that even people from neighboring town gather here to witness the spectacle",
+      "source_id": "281474976894795_f2258_chunk_9.wav",
+      "duration_seconds": 15.6258125
+    },
+    {
+      "eval_id": "svarah_test_0043",
+      "row_index": 1463,
+      "reference": "On",
+      "source_id": "281474976902169_f415_chunk_0.wav",
+      "duration_seconds": 0.5145
+    },
+    {
+      "eval_id": "svarah_test_0044",
+      "row_index": 1575,
+      "reference": "The people in a traditional school focus on the subjects that are of the same for everyone",
+      "source_id": "281474976883946_f1999_chunk_12.wav",
+      "duration_seconds": 5.8235625
+    },
+    {
+      "eval_id": "svarah_test_0045",
+      "row_index": 1628,
+      "reference": "Initially, I used to think that yoga is very hard to practice.",
+      "source_id": "281474976896698_f1923_chunk_1.wav",
+      "duration_seconds": 7.0514375
+    },
+    {
+      "eval_id": "svarah_test_0046",
+      "row_index": 1629,
+      "reference": "For example, you might be able to decrease your shipping costs",
+      "source_id": "281474976891553_f2355_chunk_0.wav",
+      "duration_seconds": 3.884125
+    },
+    {
+      "eval_id": "svarah_test_0047",
+      "row_index": 1716,
+      "reference": "Apart from these factors, the challenges like salary given to private school teachers is quite meager and they find it quite hard to make their ends meet in such less income.",
+      "source_id": "281474976894267_f3266_chunk_12.wav",
+      "duration_seconds": 12.75525
+    },
+    {
+      "eval_id": "svarah_test_0048",
+      "row_index": 1728,
+      "reference": "Show a list of all available vaccination center in State Maharashtra",
+      "source_id": "281474976893960_f2523_chunk_0.wav",
+      "duration_seconds": 4.1514375
+    },
+    {
+      "eval_id": "svarah_test_0049",
+      "row_index": 1741,
+      "reference": "Government",
+      "source_id": "281474976891411_f2041_chunk_2.wav",
+      "duration_seconds": 0.6220625
+    },
+    {
+      "eval_id": "svarah_test_0050",
+      "row_index": 1763,
+      "reference": "So, the matter I took take to paint is nature maybe a same scenery or any animal or flowers",
+      "source_id": "281474976898123_f1870_chunk_0.wav",
+      "duration_seconds": 9.400875
+    },
+    {
+      "eval_id": "svarah_test_0051",
+      "row_index": 1791,
+      "reference": "So yes, English plays a very important role in exchanging and communication that is very very important",
+      "source_id": "281474976901611_f1789_chunk_8.wav",
+      "duration_seconds": 7.4659375
+    },
+    {
+      "eval_id": "svarah_test_0052",
+      "row_index": 1796,
+      "reference": "more than any other kind",
+      "source_id": "281474976897390_f1754_chunk_1.wav",
+      "duration_seconds": 1.8670625
+    },
+    {
+      "eval_id": "svarah_test_0053",
+      "row_index": 1799,
+      "reference": "the 10th day and up to Purnima, people visit to their relatives",
+      "source_id": "281474976888873_f2272_chunk_28.wav",
+      "duration_seconds": 8.8494375
+    },
+    {
+      "eval_id": "svarah_test_0054",
+      "row_index": 1805,
+      "reference": "throng and climb the Baukungri peak",
+      "source_id": "281474976893915_f2228_chunk_12.wav",
+      "duration_seconds": 1.799375
+    },
+    {
+      "eval_id": "svarah_test_0055",
+      "row_index": 1828,
+      "reference": "Yeah.",
+      "source_id": "281474976893171_f3135_chunk_11.wav",
+      "duration_seconds": 0.56
+    },
+    {
+      "eval_id": "svarah_test_0056",
+      "row_index": 1866,
+      "reference": "On",
+      "source_id": "281474976896836_f828_chunk_0.wav",
+      "duration_seconds": 0.69075
+    },
+    {
+      "eval_id": "svarah_test_0057",
+      "row_index": 1876,
+      "reference": "food",
+      "source_id": "281474976894268_f1720_chunk_2.wav",
+      "duration_seconds": 0.48
+    },
+    {
+      "eval_id": "svarah_test_0058",
+      "row_index": 1905,
+      "reference": "She is the recipient of several accolades including a Filmfare Award.",
+      "source_id": "281474976897060_f686_chunk_0.wav",
+      "duration_seconds": 3.5531875
+    },
+    {
+      "eval_id": "svarah_test_0059",
+      "row_index": 1907,
+      "reference": "So in order to bring all these back, in order to promote our cultural aspects, our cultural",
+      "source_id": "281474976887171_f3278_chunk_6.wav",
+      "duration_seconds": 5.0
+    },
+    {
+      "eval_id": "svarah_test_0060",
+      "row_index": 2005,
+      "reference": "There, There is something which pulls me towards that book which makes me read again and again and again is the kind of connection I feel with her stories.",
+      "source_id": "281474976894789_f2128_chunk_1.wav",
+      "duration_seconds": 12.4811875
+    },
+    {
+      "eval_id": "svarah_test_0061",
+      "row_index": 2006,
+      "reference": "volume level",
+      "source_id": "281474976899703_f2791_chunk_0.wav",
+      "duration_seconds": 1.1055
+    },
+    {
+      "eval_id": "svarah_test_0062",
+      "row_index": 2020,
+      "reference": "Pay Rs. 500 more to the last scanned QR code",
+      "source_id": "281474976894227_f2830_chunk_0.wav",
+      "duration_seconds": 3.456
+    },
+    {
+      "eval_id": "svarah_test_0063",
+      "row_index": 2059,
+      "reference": "Down",
+      "source_id": "281474976897499_f674_chunk_0.wav",
+      "duration_seconds": 0.287
+    },
+    {
+      "eval_id": "svarah_test_0064",
+      "row_index": 2152,
+      "reference": "William Shakespeare is believed to be responsible for the addition of thousands of words new words.",
+      "source_id": "281474976893853_f3252_chunk_10.wav",
+      "duration_seconds": 10.309375
+    },
+    {
+      "eval_id": "svarah_test_0065",
+      "row_index": 2157,
+      "reference": "the people who practice those different religions, they have a high level of tolerance and respect for each other's religion",
+      "source_id": "281474976900339_f2186_chunk_1.wav",
+      "duration_seconds": 7.6595
+    },
+    {
+      "eval_id": "svarah_test_0066",
+      "row_index": 2166,
+      "reference": "Lakshmi Vilas Palace, residence of Vadodara's royal family.",
+      "source_id": "281474976896765_f1886_chunk_0.wav",
+      "duration_seconds": 5.145
+    },
+    {
+      "eval_id": "svarah_test_0067",
+      "row_index": 2169,
+      "reference": "What are the items in Processed Food items with the offer of minimum 40 % ?",
+      "source_id": "281474976901626_f742_chunk_0.wav",
+      "duration_seconds": 5.6805
+    },
+    {
+      "eval_id": "svarah_test_0068",
+      "row_index": 2185,
+      "reference": "Up",
+      "source_id": "281474976898593_f650_chunk_0.wav",
+      "duration_seconds": 0.332375
+    },
+    {
+      "eval_id": "svarah_test_0069",
+      "row_index": 2187,
+      "reference": "our festivals which are considered to be the symbols",
+      "source_id": "281474976897522_f1981_chunk_5.wav",
+      "duration_seconds": 5.5996875
+    },
+    {
+      "eval_id": "svarah_test_0070",
+      "row_index": 2193,
+      "reference": "Backward",
+      "source_id": "281474976902158_f164_chunk_0.wav",
+      "duration_seconds": 0.8645625
+    },
+    {
+      "eval_id": "svarah_test_0071",
+      "row_index": 2211,
+      "reference": "That is why I like poetry, and it is my favorite genre in writing.",
+      "source_id": "281474976894265_f3140_chunk_7.wav",
+      "duration_seconds": 4.8
+    },
+    {
+      "eval_id": "svarah_test_0072",
+      "row_index": 2253,
+      "reference": "Agree",
+      "source_id": "281474976893648_f150_chunk_0.wav",
+      "duration_seconds": 0.4334375
+    },
+    {
+      "eval_id": "svarah_test_0073",
+      "row_index": 2276,
+      "reference": "The Fine Old English Gentleman is one of his finest poems.",
+      "source_id": "281474976894273_f3279_chunk_8.wav",
+      "duration_seconds": 4.16
+    },
+    {
+      "eval_id": "svarah_test_0074",
+      "row_index": 2277,
+      "reference": "Subarnapur",
+      "source_id": "281474976897387_f2253_chunk_4.wav",
+      "duration_seconds": 0.794375
+    },
+    {
+      "eval_id": "svarah_test_0075",
+      "row_index": 2278,
+      "reference": "There is no restriction on",
+      "source_id": "281474976897394_f1833_chunk_17.wav",
+      "duration_seconds": 1.975
+    },
+    {
+      "eval_id": "svarah_test_0076",
+      "row_index": 2370,
+      "reference": "that is noodle.",
+      "source_id": "281474976903903_f3117_chunk_2.wav",
+      "duration_seconds": 0.9589375
+    },
+    {
+      "eval_id": "svarah_test_0077",
+      "row_index": 2401,
+      "reference": "Although a French citizen, she has been brought up and lived most of her life in India.",
+      "source_id": "281474976883818_f3003_chunk_0.wav",
+      "duration_seconds": 5.70175
+    },
+    {
+      "eval_id": "svarah_test_0078",
+      "row_index": 2404,
+      "reference": "or may it be any local vendor. They will always be ready to help people coming from outside Odisha.",
+      "source_id": "281474976898127_f1984_chunk_7.wav",
+      "duration_seconds": 7.880375
+    },
+    {
+      "eval_id": "svarah_test_0079",
+      "row_index": 2444,
+      "reference": "developing steps",
+      "source_id": "281474976894268_f1720_chunk_13.wav",
+      "duration_seconds": 0.957125
+    },
+    {
+      "eval_id": "svarah_test_0080",
+      "row_index": 2577,
+      "reference": "In India, most states, they focus more on studies and rather less on sports. That is the reason why we have low sports categories in our states",
+      "source_id": "281474976887038_f1912_chunk_0.wav",
+      "duration_seconds": 13.5355625
+    },
+    {
+      "eval_id": "svarah_test_0081",
+      "row_index": 2584,
+      "reference": "let me hear my list",
+      "source_id": "281474976897543_f799_chunk_0.wav",
+      "duration_seconds": 2.1339375
+    },
+    {
+      "eval_id": "svarah_test_0082",
+      "row_index": 2656,
+      "reference": "A reduction in this cost is evidence that you are building a recognized brand.",
+      "source_id": "281474976893586_f1416_chunk_0.wav",
+      "duration_seconds": 6.7165
+    },
+    {
+      "eval_id": "svarah_test_0083",
+      "row_index": 2757,
+      "reference": "Kuwait",
+      "source_id": "281474976889211_f1776_chunk_3.wav",
+      "duration_seconds": 0.663
+    },
+    {
+      "eval_id": "svarah_test_0084",
+      "row_index": 2786,
+      "reference": "Being even a few minutes late may disqualify your submission.",
+      "source_id": "281474976893855_f306_chunk_0.wav",
+      "duration_seconds": 3.3270625
+    },
+    {
+      "eval_id": "svarah_test_0085",
+      "row_index": 2787,
+      "reference": "Forward",
+      "source_id": "281474976906761_f2451_chunk_0.wav",
+      "duration_seconds": 0.5409375
+    },
+    {
+      "eval_id": "svarah_test_0086",
+      "row_index": 2817,
+      "reference": "i want you to mute",
+      "source_id": "281474976888840_f911_chunk_0.wav",
+      "duration_seconds": 0.9049375
+    },
+    {
+      "eval_id": "svarah_test_0087",
+      "row_index": 2910,
+      "reference": "Three",
+      "source_id": "281474976895618_f858_chunk_0.wav",
+      "duration_seconds": 0.483
+    },
+    {
+      "eval_id": "svarah_test_0088",
+      "row_index": 2940,
+      "reference": "Your MPIN is invalid for mobile number 77341091445",
+      "source_id": "281474976885082_f1481_chunk_0.wav",
+      "duration_seconds": 7.2838125
+    },
+    {
+      "eval_id": "svarah_test_0089",
+      "row_index": 2962,
+      "reference": "raise the volume",
+      "source_id": "281474976897846_f1650_chunk_0.wav",
+      "duration_seconds": 0.9315625
+    },
+    {
+      "eval_id": "svarah_test_0090",
+      "row_index": 2965,
+      "reference": "So if they are not using glutes they will tire the their other muscles and that will lead to fatigue.",
+      "source_id": "281474976888155_f3164_chunk_6.wav",
+      "duration_seconds": 11.0450625
+    },
+    {
+      "eval_id": "svarah_test_0091",
+      "row_index": 2988,
+      "reference": "are being converted into residential sites",
+      "source_id": "281474976884364_f1979_chunk_6.wav",
+      "duration_seconds": 2.927625
+    },
+    {
+      "eval_id": "svarah_test_0092",
+      "row_index": 3032,
+      "reference": "As I am not a professional singer,",
+      "source_id": "281474976901155_f2246_chunk_0.wav",
+      "duration_seconds": 2.1175
+    },
+    {
+      "eval_id": "svarah_test_0093",
+      "row_index": 3063,
+      "reference": "But somebody from Mumbai or Bangalore could very well learn Odissi",
+      "source_id": "281474976884085_f3239_chunk_34.wav",
+      "duration_seconds": 4.88
+    },
+    {
+      "eval_id": "svarah_test_0094",
+      "row_index": 3100,
+      "reference": "and use them in our bath powders or",
+      "source_id": "281474976884627_f3339_chunk_14.wav",
+      "duration_seconds": 3.168625
+    },
+    {
+      "eval_id": "svarah_test_0095",
+      "row_index": 3108,
+      "reference": "Well, I was not a student of English medium.",
+      "source_id": "281474976896205_f1725_chunk_0.wav",
+      "duration_seconds": 7.183375
+    },
+    {
+      "eval_id": "svarah_test_0096",
+      "row_index": 3112,
+      "reference": "agriculture",
+      "source_id": "281474976897394_f1833_chunk_2.wav",
+      "duration_seconds": 0.85
+    },
+    {
+      "eval_id": "svarah_test_0097",
+      "row_index": 3113,
+      "reference": "its multiple subplots and the complicated plot",
+      "source_id": "281474976898614_f1752_chunk_4.wav",
+      "duration_seconds": 3.8035
+    },
+    {
+      "eval_id": "svarah_test_0098",
+      "row_index": 3126,
+      "reference": "So after the celebration all the materials that is gathered or collected are",
+      "source_id": "281474976893852_f1949_chunk_9.wav",
+      "duration_seconds": 8.3243125
+    },
+    {
+      "eval_id": "svarah_test_0099",
+      "row_index": 3152,
+      "reference": "Can you help in searching for ESIC Centres located in area with pincode 198753 and centre type IMP Clinic",
+      "source_id": "281474976887200_f1519_chunk_0.wav",
+      "duration_seconds": 11.5928125
+    },
+    {
+      "eval_id": "svarah_test_0100",
+      "row_index": 3241,
+      "reference": "Social media and online education platforms plays a vital role in the field of education.",
+      "source_id": "281474976887082_f3312_chunk_0.wav",
+      "duration_seconds": 6.1685
+    },
+    {
+      "eval_id": "svarah_test_0101",
+      "row_index": 3271,
+      "reference": "Off",
+      "source_id": "281474976895416_f2380_chunk_0.wav",
+      "duration_seconds": 0.546875
+    },
+    {
+      "eval_id": "svarah_test_0102",
+      "row_index": 3286,
+      "reference": "compare to other languages English has wider audience",
+      "source_id": "281474976900344_f1750_chunk_0.wav",
+      "duration_seconds": 5.2986875
+    },
+    {
+      "eval_id": "svarah_test_0103",
+      "row_index": 3436,
+      "reference": "Bangalore is known as a city of entrepreneurs.",
+      "source_id": "281474976887473_f1715_chunk_0.wav",
+      "duration_seconds": 3.324125
+    },
+    {
+      "eval_id": "svarah_test_0104",
+      "row_index": 3456,
+      "reference": "Tell me how to link multiple bank accounts and transfer money between my own accounts in Maharashtra Gramin Bank",
+      "source_id": "281474976897273_f1112_chunk_0.wav",
+      "duration_seconds": 8.204875
+    },
+    {
+      "eval_id": "svarah_test_0105",
+      "row_index": 3458,
+      "reference": "Previous",
+      "source_id": "281474976895595_f63_chunk_0.wav",
+      "duration_seconds": 0.9966875
+    },
+    {
+      "eval_id": "svarah_test_0106",
+      "row_index": 3462,
+      "reference": "Attacks targeting police have become common in the Nangarhar province",
+      "source_id": "281474976883957_f1030_chunk_0.wav",
+      "duration_seconds": 3.79625
+    },
+    {
+      "eval_id": "svarah_test_0107",
+      "row_index": 3509,
+      "reference": "In North Bihar, there is a lot of flooding,",
+      "source_id": "281474976888158_f3257_chunk_6.wav",
+      "duration_seconds": 4.24
+    },
+    {
+      "eval_id": "svarah_test_0108",
+      "row_index": 3561,
+      "reference": "Capturing candid moment can make a great portrait I think.",
+      "source_id": "281474976885716_f1823_chunk_0.wav",
+      "duration_seconds": 4.359
+    },
+    {
+      "eval_id": "svarah_test_0109",
+      "row_index": 3679,
+      "reference": "The art and craft of our state",
+      "source_id": "281474976896703_f3122_chunk_1.wav",
+      "duration_seconds": 3.001875
+    },
+    {
+      "eval_id": "svarah_test_0110",
+      "row_index": 3714,
+      "reference": "Can I get my order delivered after 2 Hours",
+      "source_id": "281474976897850_f1651_chunk_0.wav",
+      "duration_seconds": 3.0600625
+    },
+    {
+      "eval_id": "svarah_test_0111",
+      "row_index": 3716,
+      "reference": "Chhath Puja is a folk festival that lasts four days.",
+      "source_id": "281474976890907_f263_chunk_0.wav",
+      "duration_seconds": 4.5395
+    },
+    {
+      "eval_id": "svarah_test_0112",
+      "row_index": 3758,
+      "reference": "One",
+      "source_id": "281474976909258_f3051_chunk_0.wav",
+      "duration_seconds": 0.4775
+    },
+    {
+      "eval_id": "svarah_test_0113",
+      "row_index": 3763,
+      "reference": "On",
+      "source_id": "281474976901127_f1618_chunk_0.wav",
+      "duration_seconds": 0.435125
+    },
+    {
+      "eval_id": "svarah_test_0114",
+      "row_index": 3786,
+      "reference": "So the first day of Bohag Bihu is called Guru Bihu. In this Bihu, bulls or cows are bathed in the bank of a river.",
+      "source_id": "281474976893848_f3250_chunk_5.wav",
+      "duration_seconds": 12.95
+    },
+    {
+      "eval_id": "svarah_test_0115",
+      "row_index": 3834,
+      "reference": "Now taking the government schools into account, not much was done",
+      "source_id": "281474976894268_f1720_chunk_19.wav",
+      "duration_seconds": 3.1
+    },
+    {
+      "eval_id": "svarah_test_0116",
+      "row_index": 4042,
+      "reference": "We have a composter at our garden in our house",
+      "source_id": "281474976884627_f3339_chunk_0.wav",
+      "duration_seconds": 3.16
+    },
+    {
+      "eval_id": "svarah_test_0117",
+      "row_index": 4089,
+      "reference": "What remaining bills do I have to pay for this month ?",
+      "source_id": "281474976903190_f1337_chunk_0.wav",
+      "duration_seconds": 2.79775
+    },
+    {
+      "eval_id": "svarah_test_0118",
+      "row_index": 4100,
+      "reference": "Indian English speakers of English",
+      "source_id": "281474976883951_f2089_chunk_7.wav",
+      "duration_seconds": 3.558625
+    },
+    {
+      "eval_id": "svarah_test_0119",
+      "row_index": 4139,
+      "reference": "Chalazion surgery is a safe procedure and complications seldom occur.",
+      "source_id": "281474976885764_f1325_chunk_2.wav",
+      "duration_seconds": 5.5616875
+    },
+    {
+      "eval_id": "svarah_test_0120",
+      "row_index": 4158,
+      "reference": "Can you add 120 gm The Laughing Cow Creamy Cheese Triangles to my shopping list?",
+      "source_id": "281474976892178_f804_chunk_0.wav",
+      "duration_seconds": 7.1489375
+    },
+    {
+      "eval_id": "svarah_test_0121",
+      "row_index": 4174,
+      "reference": "One is their",
+      "source_id": "281474976893646_f1788_chunk_1.wav",
+      "duration_seconds": 0.966
+    },
+    {
+      "eval_id": "svarah_test_0122",
+      "row_index": 4334,
+      "reference": "as the story developed, which is set in the time of the English Civil War in the 17th century, it became really very interesting and also described not only the culture and the social mores of the period, but also developed into a very good storyline.",
+      "source_id": "281474976884033_f1918_chunk_1.wav",
+      "duration_seconds": 26.60975
+    },
+    {
+      "eval_id": "svarah_test_0123",
+      "row_index": 4375,
+      "reference": "Can you send money to unsaved mobile numbers in Pay",
+      "source_id": "281474976909234_f2865_chunk_0.wav",
+      "duration_seconds": 3.70275
+    },
+    {
+      "eval_id": "svarah_test_0124",
+      "row_index": 4392,
+      "reference": "Kerala's cultural heritage is centuries old. The culture of Kerala is an amalgam of native art forms, language, literature, architectural style, music, festivals, cuisine, archaeological monuments, heritage centers and so on",
+      "source_id": "281474976883948_f1921_chunk_1.wav",
+      "duration_seconds": 16.597
+    },
+    {
+      "eval_id": "svarah_test_0125",
+      "row_index": 4398,
+      "reference": "Up",
+      "source_id": "281474976903881_f1632_chunk_0.wav",
+      "duration_seconds": 0.1353125
+    },
+    {
+      "eval_id": "svarah_test_0126",
+      "row_index": 4415,
+      "reference": "So the climate here in Kanimpung, the winter are a bit cold,",
+      "source_id": "281474976915910_f3189_chunk_1.wav",
+      "duration_seconds": 9.0
+    },
+    {
+      "eval_id": "svarah_test_0127",
+      "row_index": 4464,
+      "reference": "in 1864",
+      "source_id": "281474976900603_f2255_chunk_40.wav",
+      "duration_seconds": 1.72
+    },
+    {
+      "eval_id": "svarah_test_0128",
+      "row_index": 4467,
+      "reference": "It is famous for many cultural traditions like Kirtan, Natak, Allah Rudal etc.",
+      "source_id": "281474976888161_f1851_chunk_7.wav",
+      "duration_seconds": 7.8526875
+    },
+    {
+      "eval_id": "svarah_test_0129",
+      "row_index": 4522,
+      "reference": "HIV directly infects a small number of T helper cells, and also impairs other immune system responses indirectly.",
+      "source_id": "281474976901433_f1231_chunk_0.wav",
+      "duration_seconds": 9.4105
+    },
+    {
+      "eval_id": "svarah_test_0130",
+      "row_index": 4532,
+      "reference": "London, Singapore, New York, Bangkok, Dubai.",
+      "source_id": "281474976886918_f1857_chunk_0.wav",
+      "duration_seconds": 4.8084375
+    },
+    {
+      "eval_id": "svarah_test_0131",
+      "row_index": 4562,
+      "reference": "Add Fendo Two Fold Umbrella worth rupees R",
+      "source_id": "281474976886899_f726_chunk_0.wav",
+      "duration_seconds": 4.3791875
+    },
+    {
+      "eval_id": "svarah_test_0132",
+      "row_index": 4597,
+      "reference": "students girls students with",
+      "source_id": "281474976885801_f2235_chunk_29.wav",
+      "duration_seconds": 1.9000625
+    },
+    {
+      "eval_id": "svarah_test_0133",
+      "row_index": 4598,
+      "reference": "What was the last book you read that really impacted you and how did it do so?",
+      "source_id": "281474976893779_f3110_chunk_0.wav",
+      "duration_seconds": 5.52
+    },
+    {
+      "eval_id": "svarah_test_0134",
+      "row_index": 4646,
+      "reference": "Chandigarh IT Park, also known as Rajiv Gandhi Chandigarh Technology Park, is the city's attempt to break into the information technology world.",
+      "source_id": "281474976896711_f948_chunk_0.wav",
+      "duration_seconds": 8.542125
+    },
+    {
+      "eval_id": "svarah_test_0135",
+      "row_index": 4729,
+      "reference": "save my music preferences",
+      "source_id": "281474976893944_f3041_chunk_0.wav",
+      "duration_seconds": 2.11825
+    },
+    {
+      "eval_id": "svarah_test_0136",
+      "row_index": 4780,
+      "reference": "Tree",
+      "source_id": "281474976895303_f2487_chunk_0.wav",
+      "duration_seconds": 0.4431875
+    },
+    {
+      "eval_id": "svarah_test_0137",
+      "row_index": 4788,
+      "reference": "discrimination is also a big issue in schools and colleges discrimination based on caste and religion is very much pronounced in Gujarat's education system",
+      "source_id": "281474976900640_f2173_chunk_8.wav",
+      "duration_seconds": 20.658375
+    },
+    {
+      "eval_id": "svarah_test_0138",
+      "row_index": 4827,
+      "reference": "culture values are also changing with their forms",
+      "source_id": "281474976897522_f1981_chunk_7.wav",
+      "duration_seconds": 6.3996875
+    },
+    {
+      "eval_id": "svarah_test_0139",
+      "row_index": 4837,
+      "reference": "When people live together in a society, these are there this results automatically.",
+      "source_id": "281474976897897_f3120_chunk_1.wav",
+      "duration_seconds": 6.540625
+    },
+    {
+      "eval_id": "svarah_test_0140",
+      "row_index": 4881,
+      "reference": "Kamrup metro Nalbari, Nagaon, Sonitpur, Lakhimpur.",
+      "source_id": "281474976934169_f3288_chunk_0.wav",
+      "duration_seconds": 9.64
+    },
+    {
+      "eval_id": "svarah_test_0141",
+      "row_index": 4885,
+      "reference": "Katak",
+      "source_id": "281474976898115_f1790_chunk_2.wav",
+      "duration_seconds": 0.5036875
+    },
+    {
+      "eval_id": "svarah_test_0142",
+      "row_index": 4931,
+      "reference": "The answer is",
+      "source_id": "281474976893074_f2254_chunk_1.wav",
+      "duration_seconds": 1.0120625
+    },
+    {
+      "eval_id": "svarah_test_0143",
+      "row_index": 4945,
+      "reference": "It cannot be denied that opportunities have increased. There were also suggestions of making some villages model villages, but those ended only in the stage of an idea",
+      "source_id": "281474976884364_f1979_chunk_3.wav",
+      "duration_seconds": 9.9998125
+    },
+    {
+      "eval_id": "svarah_test_0144",
+      "row_index": 4988,
+      "reference": "At any time during this phase, the car dealer may offer to settle with you.",
+      "source_id": "281474976889867_f2681_chunk_0.wav",
+      "duration_seconds": 4.6070625
+    },
+    {
+      "eval_id": "svarah_test_0145",
+      "row_index": 4990,
+      "reference": "Yes",
+      "source_id": "281474976896830_f2519_chunk_0.wav",
+      "duration_seconds": 0.680125
+    },
+    {
+      "eval_id": "svarah_test_0146",
+      "row_index": 5066,
+      "reference": "and some of the main festivals",
+      "source_id": "281474976890748_f2054_chunk_6.wav",
+      "duration_seconds": 2.4855625
+    },
+    {
+      "eval_id": "svarah_test_0147",
+      "row_index": 5122,
+      "reference": "Why did I get zero discount when the Slurrp Farm Oats Instant Powder mentioned 90 % on order",
+      "source_id": "281474976884446_f656_chunk_0.wav",
+      "duration_seconds": 6.481375
+    },
+    {
+      "eval_id": "svarah_test_0148",
+      "row_index": 5140,
+      "reference": "Can I change my delivery date from 11-9-2021 TO 23-4-2020 ?",
+      "source_id": "281474976885073_f2333_chunk_0.wav",
+      "duration_seconds": 5.5496875
+    },
+    {
+      "eval_id": "svarah_test_0149",
+      "row_index": 5149,
+      "reference": "Yes",
+      "source_id": "281474976895479_f76_chunk_0.wav",
+      "duration_seconds": 0.37925
+    },
+    {
+      "eval_id": "svarah_test_0150",
+      "row_index": 5201,
+      "reference": "he Padanilam or the battlefield is a paddy field adjacent to the famous Ochera Parabrahma temple and the festivities are part of a ritual associated with the shrine",
+      "source_id": "281474976894943_f1785_chunk_8.wav",
+      "duration_seconds": 11.63725
+    },
+    {
+      "eval_id": "svarah_test_0151",
+      "row_index": 5207,
+      "reference": "is the head of the government, heading the council of ministers.",
+      "source_id": "281474976893174_f1860_chunk_6.wav",
+      "duration_seconds": 4.4999375
+    },
+    {
+      "eval_id": "svarah_test_0152",
+      "row_index": 5234,
+      "reference": "House",
+      "source_id": "281474976901585_f2766_chunk_0.wav",
+      "duration_seconds": 0.824375
+    },
+    {
+      "eval_id": "svarah_test_0153",
+      "row_index": 5238,
+      "reference": "Some popular beaches in my state Odisha are",
+      "source_id": "281474976899792_f1793_chunk_0.wav",
+      "duration_seconds": 3.129125
+    },
+    {
+      "eval_id": "svarah_test_0154",
+      "row_index": 5242,
+      "reference": "The child with special needs are now accommodated in regular schools where school has resource rooms for them",
+      "source_id": "281474976890944_f1940_chunk_0.wav",
+      "duration_seconds": 8.267375
+    },
+    {
+      "eval_id": "svarah_test_0155",
+      "row_index": 5250,
+      "reference": "But yeah, it wouldn't harm to represent regional languages a bit more in a quest to keep them alive.",
+      "source_id": "281474976884089_f1894_chunk_8.wav",
+      "duration_seconds": 8.100625
+    },
+    {
+      "eval_id": "svarah_test_0156",
+      "row_index": 5266,
+      "reference": "Some local art forms or crafts that are unique to my district are Bagurumba dance, silk rearing, and weaving. Bagurumba is a dance form performed by women folk belonging to Boro community.",
+      "source_id": "281474976897463_f1783_chunk_0.wav",
+      "duration_seconds": 15.81725
+    },
+    {
+      "eval_id": "svarah_test_0157",
+      "row_index": 5308,
+      "reference": "Jump",
+      "source_id": "281474976895667_f1168_chunk_0.wav",
+      "duration_seconds": 0.54125
+    },
+    {
+      "eval_id": "svarah_test_0158",
+      "row_index": 5323,
+      "reference": "Language, though a means of communication, is naturally the expression or representation",
+      "source_id": "281474976889226_f3230_chunk_0.wav",
+      "duration_seconds": 5.6
+    },
+    {
+      "eval_id": "svarah_test_0159",
+      "row_index": 5369,
+      "reference": "Three",
+      "source_id": "281474976897091_f2875_chunk_0.wav",
+      "duration_seconds": 0.227875
+    },
+    {
+      "eval_id": "svarah_test_0160",
+      "row_index": 5417,
+      "reference": "Education for girls is top priorities in our state after our Prime Minister Shri Narendra Modi ji has given the slogan, Beti Bachao, Beti Padhao.",
+      "source_id": "281474976887042_f2142_chunk_0.wav",
+      "duration_seconds": 14.96875
+    },
+    {
+      "eval_id": "svarah_test_0161",
+      "row_index": 5490,
+      "reference": "The present district of South 24 Parganas came into existence on March 1, 1986. It then comprised of two subdivisions, namely, Alipur and Diamond Harbour, and 30 blocks.",
+      "source_id": "281474976895139_f2137_chunk_1.wav",
+      "duration_seconds": 14.8303125
+    },
+    {
+      "eval_id": "svarah_test_0162",
+      "row_index": 5543,
+      "reference": "or what are the things that you should try in the state, they will also help maybe it may be a shop person",
+      "source_id": "281474976898127_f1984_chunk_6.wav",
+      "duration_seconds": 6.1603125
+    },
+    {
+      "eval_id": "svarah_test_0163",
+      "row_index": 5572,
+      "reference": "Wow",
+      "source_id": "281474976883978_f1047_chunk_0.wav",
+      "duration_seconds": 0.5210625
+    },
+    {
+      "eval_id": "svarah_test_0164",
+      "row_index": 5574,
+      "reference": "like manganese, limestone, and pyrite,",
+      "source_id": "281474976888158_f3257_chunk_4.wav",
+      "duration_seconds": 2.88
+    },
+    {
+      "eval_id": "svarah_test_0165",
+      "row_index": 5584,
+      "reference": "Tree",
+      "source_id": "281474976899483_f1093_chunk_0.wav",
+      "duration_seconds": 0.415125
+    },
+    {
+      "eval_id": "svarah_test_0166",
+      "row_index": 5599,
+      "reference": "Open my transaction history for the last 24 hours and mute the contact Wahida",
+      "source_id": "281474976883926_f558_chunk_0.wav",
+      "duration_seconds": 5.116375
+    },
+    {
+      "eval_id": "svarah_test_0167",
+      "row_index": 5608,
+      "reference": "Sports teach a person sportsman spirit, hard work, alertness, acceptance, and discipline more than any other source.",
+      "source_id": "281474976895906_f2159_chunk_0.wav",
+      "duration_seconds": 10.590375
+    },
+    {
+      "eval_id": "svarah_test_0168",
+      "row_index": 5637,
+      "reference": "Can you transfer Rs. 400 to my 6844663153262 in IndusInd Bank fortnightly via PayUmoney and give me an alert in case the balance goes below that?",
+      "source_id": "281474976884016_f1283_chunk_0.wav",
+      "duration_seconds": 15.202625
+    },
+    {
+      "eval_id": "svarah_test_0169",
+      "row_index": 5719,
+      "reference": "by making transactions on Limeroad",
+      "source_id": "281474976909237_f3049_chunk_1.wav",
+      "duration_seconds": 2.42
+    },
+    {
+      "eval_id": "svarah_test_0170",
+      "row_index": 5745,
+      "reference": "Up",
+      "source_id": "281474976895243_f649_chunk_0.wav",
+      "duration_seconds": 0.2104375
+    },
+    {
+      "eval_id": "svarah_test_0171",
+      "row_index": 5749,
+      "reference": "A cruise boat service has been started by the tourism department for visitors to the dam and reservoir.",
+      "source_id": "281474976887047_f579_chunk_0.wav",
+      "duration_seconds": 7.8913125
+    },
+    {
+      "eval_id": "svarah_test_0172",
+      "row_index": 5771,
+      "reference": "Learn",
+      "source_id": "281474976925487_f3019_chunk_0.wav",
+      "duration_seconds": 0.443375
+    },
+    {
+      "eval_id": "svarah_test_0173",
+      "row_index": 5865,
+      "reference": "Najib's dream was to work in the Persian Gulf states and earn enough money to send back home",
+      "source_id": "281474976894937_f1920_chunk_5.wav",
+      "duration_seconds": 6.9035625
+    },
+    {
+      "eval_id": "svarah_test_0174",
+      "row_index": 5881,
+      "reference": "Yeah, mostly through",
+      "source_id": "281474976886817_f1675_chunk_0.wav",
+      "duration_seconds": 1.404125
+    },
+    {
+      "eval_id": "svarah_test_0175",
+      "row_index": 5895,
+      "reference": "Nila",
+      "source_id": "281474976886810_f1861_chunk_4.wav",
+      "duration_seconds": 0.42425
+    },
+    {
+      "eval_id": "svarah_test_0176",
+      "row_index": 5904,
+      "reference": "brainwashing a child towards a particular religion is a strict no",
+      "source_id": "281474976885800_f1683_chunk_16.wav",
+      "duration_seconds": 4.9393125
+    },
+    {
+      "eval_id": "svarah_test_0177",
+      "row_index": 5915,
+      "reference": "Is there any Kids vaccination centre in the PIN Code 967045",
+      "source_id": "281474976884112_f850_chunk_0.wav",
+      "duration_seconds": 5.67875
+    },
+    {
+      "eval_id": "svarah_test_0178",
+      "row_index": 5973,
+      "reference": "Davis was back in prison and admitted a role in a different armed robbery, at a Bank of Cyprus branch.",
+      "source_id": "281474976906734_f2919_chunk_1.wav",
+      "duration_seconds": 7.0946875
+    },
+    {
+      "eval_id": "svarah_test_0179",
+      "row_index": 5977,
+      "reference": "we have seen the assimilation of the culture in English language in India.",
+      "source_id": "281474976902194_f2056_chunk_3.wav",
+      "duration_seconds": 4.597
+    },
+    {
+      "eval_id": "svarah_test_0180",
+      "row_index": 6033,
+      "reference": "Go",
+      "source_id": "281474976899944_f82_chunk_0.wav",
+      "duration_seconds": 0.5059375
+    },
+    {
+      "eval_id": "svarah_test_0181",
+      "row_index": 6067,
+      "reference": "Why did I get zero discount when the Garden Raita Boondi mentioned 40 % on order",
+      "source_id": "281474976887634_f474_chunk_0.wav",
+      "duration_seconds": 6.125375
+    },
+    {
+      "eval_id": "svarah_test_0182",
+      "row_index": 6074,
+      "reference": "Despite a defeat of Ladakh by the Mughals,",
+      "source_id": "281474976894150_f2981_chunk_0.wav",
+      "duration_seconds": 3.024
+    },
+    {
+      "eval_id": "svarah_test_0183",
+      "row_index": 6102,
+      "reference": "Can you tell us about their work?",
+      "source_id": "281474976893790_f3293_chunk_1.wav",
+      "duration_seconds": 2.4718125
+    },
+    {
+      "eval_id": "svarah_test_0184",
+      "row_index": 6119,
+      "reference": "During which several architecture, literature and monuments have been built by the British Empire.",
+      "source_id": "281474976894332_f3200_chunk_2.wav",
+      "duration_seconds": 6.639375
+    },
+    {
+      "eval_id": "svarah_test_0185",
+      "row_index": 6151,
+      "reference": "Sunitpur Dhubri",
+      "source_id": "281474976893839_f3333_chunk_3.wav",
+      "duration_seconds": 2.4840625
+    },
+    {
+      "eval_id": "svarah_test_0186",
+      "row_index": 6191,
+      "reference": "that to have a round shaped roti was an impossible task for me.",
+      "source_id": "281474976901153_f3210_chunk_4.wav",
+      "duration_seconds": 8.510875
+    },
+    {
+      "eval_id": "svarah_test_0187",
+      "row_index": 6216,
+      "reference": "working and what impact it had on people. And so, yeah.",
+      "source_id": "281474976893170_f2037_chunk_6.wav",
+      "duration_seconds": 9.872125
+    },
+    {
+      "eval_id": "svarah_test_0188",
+      "row_index": 6241,
+      "reference": "In the 21st century, the entire world has become narrow, accessible, shareable and familiar for all the people living on this earth.",
+      "source_id": "281474976925739_f3299_chunk_0.wav",
+      "duration_seconds": 9.0
+    },
+    {
+      "eval_id": "svarah_test_0189",
+      "row_index": 6246,
+      "reference": "lockdown period, last three years, so to say",
+      "source_id": "281474976897454_f1975_chunk_9.wav",
+      "duration_seconds": 3.2398125
+    },
+    {
+      "eval_id": "svarah_test_0190",
+      "row_index": 6254,
+      "reference": "Right",
+      "source_id": "281474976895799_f3036_chunk_0.wav",
+      "duration_seconds": 0.5111875
+    },
+    {
+      "eval_id": "svarah_test_0191",
+      "row_index": 6294,
+      "reference": "Add Rs 500",
+      "source_id": "281474976934140_f2456_chunk_0.wav",
+      "duration_seconds": 1.72525
+    },
+    {
+      "eval_id": "svarah_test_0192",
+      "row_index": 6296,
+      "reference": "If so, what is it and why do you keep coming back to it?",
+      "source_id": "281474976895324_f1896_chunk_1.wav",
+      "duration_seconds": 4.1125625
+    },
+    {
+      "eval_id": "svarah_test_0193",
+      "row_index": 6332,
+      "reference": "So, there are so many bodies who are working",
+      "source_id": "281474976901608_f2023_chunk_12.wav",
+      "duration_seconds": 3.44975
+    },
+    {
+      "eval_id": "svarah_test_0194",
+      "row_index": 6356,
+      "reference": "Dog",
+      "source_id": "281474976897631_f970_chunk_0.wav",
+      "duration_seconds": 0.335375
+    },
+    {
+      "eval_id": "svarah_test_0195",
+      "row_index": 6488,
+      "reference": "Three",
+      "source_id": "281474976897368_f2494_chunk_0.wav",
+      "duration_seconds": 0.3594375
+    },
+    {
+      "eval_id": "svarah_test_0196",
+      "row_index": 6594,
+      "reference": "Previously, it used to be the richer people's language or only few people can talk in English.",
+      "source_id": "281474976896706_f3294_chunk_1.wav",
+      "duration_seconds": 18.76
+    },
+    {
+      "eval_id": "svarah_test_0197",
+      "row_index": 6601,
+      "reference": "Like that, I already mentioned the title of this book, Jeewan Kadegaful.",
+      "source_id": "281474976888909_f3258_chunk_17.wav",
+      "duration_seconds": 11.802875
+    },
+    {
+      "eval_id": "svarah_test_0198",
+      "row_index": 6611,
+      "reference": "There are primary health centers in every village which provide free medical",
+      "source_id": "281474976884631_f2005_chunk_7.wav",
+      "duration_seconds": 5.925625
+    },
+    {
+      "eval_id": "svarah_test_0199",
+      "row_index": 6630,
+      "reference": "Down",
+      "source_id": "281474976897639_f1023_chunk_0.wav",
+      "duration_seconds": 0.245125
+    }
+  ]
+}

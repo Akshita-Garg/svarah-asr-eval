@@ -1,0 +1,33 @@
+[project]
+name = "voicerefine-svarah-eval"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "datasets>=5.0.1",
+    "jiwer>=4.0.0",
+    "numpy>=2.5.2",
+    "requests>=2.34.2",
+    "sherpa-onnx>=1.13.4",
+    "sherpa-onnx-core>=1.13.4",
+    "soundfile>=0.14.0",
+    "soxr>=1.1.0",
+    "whisper-normalizer>=0.1.15",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[tool.uv]
+# This repo is an application/experiment, not an installable library, so uv
+# should manage the environment from dependencies without trying to build and
+# install the project itself (there is no build backend on purpose).
+package = false
+
+[tool.pytest.ini_options]
+# The package is a flat, non-installed layout, so add the repo root to sys.path
+# for imports like `from voicerefine_eval.metrics import ...`.
+pythonpath = ["."]
+testpaths = ["tests"]
+

@@ -1,0 +1,72 @@
+# VoiceRefine Svarah evaluation configuration.
+#
+# This file IS part of the experiment definition and is committed to Git. It
+# pins the dataset revision and records the exact runtime configuration of each
+# backend (mirroring VoiceRefine Desktop). Changing any of these values changes
+# the cache keys and the run manifest, so runs stay reproducible and comparable.
+#
+# Local model/binary paths default to the sibling VoiceRefine Desktop project.
+# They are resolved relative to the repo root and can be overridden per-machine
+# with the same environment variables the desktop app uses (see each backend).
+
+[dataset]
+name = "ai4bharat/Svarah"
+split = "test"
+# Pinned at probe time (2025-03-10). The manifest records this so later runs
+# recover the exact subset from this revision.
+revision = "ebbf7777fe771490696a3f7b007097606fa8c924"
+seed = 42
+subset_size = 200
+debug_subset_size = 20
+
+# Which backends are active. A backend listed here that is missing its model,
+# binary, or key skips cleanly without blocking the others (DESIGN: graceful
+# degradation).
+[backends]
+active = [
+    "voicerefine_whisper_tiny_int8",
+    "voicerefine_parakeet_q4",
+    "elevenlabs_scribe_v2",
+]
+
+# --- Local default: VoiceRefine's lightweight alternative -------------------
+[backends.voicerefine_whisper_tiny_int8]
+type = "whisper_sherpa"
+# Env override: VOICEREFINE_SHERPA_MODEL_DIR
+model_dir = "../voicerefine-desktop/resources/models/sherpa-onnx-whisper-tiny.en"
+precision = "int8"           # int8 | fp32 ; VOICEREFINE_SHERPA_PRECISION
+num_threads = 4              # VOICEREFINE_SHERPA_THREADS
+language = "en"
+task = "transcribe"
+decoding_method = "greedy_search"
+tail_paddings = -1
+provider = "cpu"
+
+# --- Local default: VoiceRefine's shipping default model --------------------
+[backends.voicerefine_parakeet_q4]
+type = "crispasr_server"
+# Env override: VOICEREFINE_CRISPASR_BIN
+bin = "../voicerefine-desktop/resources/bin/crispasr-windows-x86_64-cpu/crispasr-windows-x86_64-cpu/crispasr.exe"
+# Env override: VOICEREFINE_CRISPASR_PARAKEET_MODEL
+model = "../voicerefine-desktop/resources/models/parakeet-tdt-0.6b-v3-GGUF/parakeet-tdt-0.6b-v3-q4_k.gguf"
+backend = "parakeet"
+language = "en"
+threads = 8                  # VOICEREFINE_CRISPASR_THREADS
+host = "127.0.0.1"
+port = 51234                 # VOICEREFINE_CRISPASR_PORT
+start_timeout_ms = 15000     # VOICEREFINE_CRISPASR_START_TIMEOUT_MS
+request_timeout_ms = 180000  # VOICEREFINE_CRISPASR_TIMEOUT_MS
+
+# --- Cloud reference --------------------------------------------------------
+[backends.elevenlabs_scribe_v2]
+type = "elevenlabs"
+model_id = "scribe_v2"       # verify against ElevenLabs' current model ids
+language_code = "eng"
+diarize = false
+tag_audio_events = false
+# API key comes from env ELEVENLABS_API_KEY (never stored in this file).
+base_url = "https://api.elevenlabs.io/v1/speech-to-text"
+max_retries = 5
+backoff_base_seconds = 1.0
+backoff_max_seconds = 30.0
+request_timeout_seconds = 300
