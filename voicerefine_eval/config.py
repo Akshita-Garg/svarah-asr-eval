@@ -98,7 +98,12 @@ def _apply_env_overrides(backend_id: str, type_: str, settings: dict[str, Any]) 
     elif type_ == "crispasr_server":
         if (v := _env("VOICEREFINE_CRISPASR_BIN")):
             s["bin"] = v
-        if (v := _env("VOICEREFINE_CRISPASR_PARAKEET_MODEL")):
+        model_env = {
+            "parakeet": "VOICEREFINE_CRISPASR_PARAKEET_MODEL",
+            "cohere": "VOICEREFINE_CRISPASR_COHERE_MODEL",
+            "whisper": "VOICEREFINE_CRISPASR_WHISPER_MODEL",
+        }.get(s.get("backend"))
+        if model_env and (v := _env(model_env)):
             s["model"] = v
         if (v := _env("VOICEREFINE_CRISPASR_PORT")):
             s["port"] = int(v)
@@ -108,6 +113,8 @@ def _apply_env_overrides(backend_id: str, type_: str, settings: dict[str, Any]) 
             s["start_timeout_ms"] = int(v)
         if (v := _env("VOICEREFINE_CRISPASR_TIMEOUT_MS")):
             s["request_timeout_ms"] = int(v)
+        if (v := _env("VOICEREFINE_CRISPASR_GPU_BACKEND")):
+            s["gpu_backend"] = v
     return s
 
 

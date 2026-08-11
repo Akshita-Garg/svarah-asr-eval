@@ -17,13 +17,17 @@ def build_backend(cfg: BackendConfig) -> ASRBackend:
 
         return WhisperTinyBackend(cfg)
     if cfg.type == "crispasr_server":
-        from .parakeet_crispasr import ParakeetCrispAsrBackend
+        from .parakeet_crispasr import CrispAsrServerBackend
 
-        return ParakeetCrispAsrBackend(cfg)
+        return CrispAsrServerBackend(cfg)
     if cfg.type == "elevenlabs":
         from .elevenlabs import ElevenLabsBackend
 
         return ElevenLabsBackend(cfg)
+    if cfg.type == "sarvam":
+        from .sarvam import SarvamBackend
+
+        return SarvamBackend(cfg)
     raise ValueError(f"Unknown backend type: {cfg.type!r} for {cfg.backend_id}")
 
 

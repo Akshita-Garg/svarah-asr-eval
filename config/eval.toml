@@ -52,10 +52,43 @@ model = "../voicerefine-desktop/resources/models/parakeet-tdt-0.6b-v3-GGUF/parak
 backend = "parakeet"
 language = "en"
 threads = 8                  # VOICEREFINE_CRISPASR_THREADS
+gpu_backend = "cpu"
+quantization = "q4_k"
 host = "127.0.0.1"
 port = 51234                 # VOICEREFINE_CRISPASR_PORT
 start_timeout_ms = 15000     # VOICEREFINE_CRISPASR_START_TIMEOUT_MS
 request_timeout_ms = 180000  # VOICEREFINE_CRISPASR_TIMEOUT_MS
+
+# --- Controlled local comparison: same CrispASR server and resources --------
+[backends.controlled_whisper_tiny_q4_0]
+type = "crispasr_server"
+bin = "../voicerefine-desktop/resources/bin/crispasr-windows-x86_64-cpu/crispasr-windows-x86_64-cpu/crispasr.exe"
+model = "models/whisper-tiny.en-GGML/ggml-tiny.en-q4_0.bin"
+backend = "whisper"
+language = "en"
+threads = 8
+gpu_backend = "cpu"
+quantization = "q4_0"
+no_punctuation = true
+host = "127.0.0.1"
+port = 51234
+start_timeout_ms = 15000
+request_timeout_ms = 180000
+
+[backends.controlled_cohere_q4]
+type = "crispasr_server"
+bin = "../voicerefine-desktop/resources/bin/crispasr-windows-x86_64-cpu/crispasr-windows-x86_64-cpu/crispasr.exe"
+model = "../voicerefine-desktop/resources/models/cohere-transcribe-03-2026-GGUF/cohere-transcribe-q4_k.gguf"
+backend = "cohere"
+language = "en"
+threads = 8
+gpu_backend = "cpu"
+quantization = "q4_k"
+no_punctuation = true
+host = "127.0.0.1"
+port = 51234
+start_timeout_ms = 15000
+request_timeout_ms = 180000
 
 # --- Cloud reference --------------------------------------------------------
 [backends.elevenlabs_scribe_v2]
@@ -66,6 +99,17 @@ diarize = false
 tag_audio_events = false
 # API key comes from env ELEVENLABS_API_KEY (never stored in this file).
 base_url = "https://api.elevenlabs.io/v1/speech-to-text"
+max_retries = 5
+backoff_base_seconds = 1.0
+backoff_max_seconds = 30.0
+request_timeout_seconds = 300
+
+[backends.sarvam_saaras_v4]
+type = "sarvam"
+model = "saaras:v4"
+language_code = "en-IN"
+# API key comes from env SARVAM_API_KEY (never stored in this file).
+base_url = "https://api.sarvam.ai/speech-to-text"
 max_retries = 5
 backoff_base_seconds = 1.0
 backoff_max_seconds = 30.0

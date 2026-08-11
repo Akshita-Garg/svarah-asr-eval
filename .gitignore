@@ -17,6 +17,7 @@ htmlcov/
 # Evaluation files that can be regenerated
 cache/
 data/prepared/
+models/
 
 # Editor and operating-system files
 .DS_Store

@@ -1,4 +1,4 @@
-"""Parakeet TDT 0.6B v3 Q4 via a persistent CrispASR server (VoiceRefine default).
+"""Local ASR models through one persistent CrispASR server protocol.
 
 Mirrors ``startCrispAsrServer`` / ``postToCrispServer`` / ``waitForPort`` /
 ``stopCrispAsrServer`` in ``voicerefine-desktop/src/main/asr.js``:
@@ -29,7 +29,7 @@ from ..hashing import sha256_file
 from .base import ASRBackend, BackendUnavailableError, TranscriptionError
 
 
-class ParakeetCrispAsrBackend(ASRBackend):
+class CrispAsrServerBackend(ASRBackend):
     def __init__(self, cfg: BackendConfig):
         super().__init__(cfg)
         self.bin_path = Path(self.settings["bin"])
@@ -37,6 +37,9 @@ class ParakeetCrispAsrBackend(ASRBackend):
         self.backend = self.settings.get("backend", "parakeet")
         self.language = self.settings.get("language", "en")
         self.threads = int(self.settings.get("threads", 8))
+        self.gpu_backend = self.settings.get("gpu_backend", "cpu")
+        self.quantization = self.settings.get("quantization")
+        self.no_punctuation = bool(self.settings.get("no_punctuation", True))
         self.host = self.settings.get("host", "127.0.0.1")
         self.port = int(self.settings.get("port", 51234))
         self.start_timeout_ms = int(self.settings.get("start_timeout_ms", 15000))
@@ -52,7 +55,7 @@ class ParakeetCrispAsrBackend(ASRBackend):
         if not self.bin_path.exists():
             raise BackendUnavailableError(f"CrispASR binary missing: {self.bin_path}")
         if not self.model_path.exists():
-            raise BackendUnavailableError(f"Parakeet model missing: {self.model_path}")
+            raise BackendUnavailableError(f"CrispASR model missing: {self.model_path}")
 
         args = [
             str(self.bin_path),
@@ -61,11 +64,14 @@ class ParakeetCrispAsrBackend(ASRBackend):
             "--model", str(self.model_path),
             "--language", self.language,
             "--threads", str(self.threads),
+            "--gpu-backend", self.gpu_backend,
             "--host", self.host,
             "--port", str(self.port),
             "--no-prints",
             "--no-timestamps",
         ]
+        if self.no_punctuation:
+            args.append("--no-punctuation")
         # windowsHide equivalent: no new console window on Windows.
         creationflags = 0
         if hasattr(subprocess, "CREATE_NO_WINDOW"):
@@ -162,16 +168,22 @@ class ParakeetCrispAsrBackend(ASRBackend):
         return self._hashes
 
     def cache_signature(self) -> dict[str, Any]:
-        # Only fields that affect the transcript output belong here. Threads/port
-        # affect speed/placement, not text, so they are excluded so a thread
-        # change doesn't needlessly invalidate cached transcripts.
         return {
             "backend_id": self.name,
             "type": "crispasr_server",
+            "runtime": "persistent_server",
             "backend": self.backend,
             "language": self.language,
+            "threads": self.threads,
+            "gpu_backend": self.gpu_backend,
+            "quantization": self.quantization,
+            "no_punctuation": self.no_punctuation,
             "hashes": self._hash_map(),
         }
+
+
+# Compatibility for imports written when this adapter only supported Parakeet.
+ParakeetCrispAsrBackend = CrispAsrServerBackend
 
 
 def _parse_response(body: str, content_type: str) -> str:
