@@ -82,12 +82,52 @@ def write_per_utterance_csv(results: list[UtteranceResult], path: Path = PER_UTT
             )
 
 
+def read_per_utterance_csv(path: Path) -> list[UtteranceResult]:
+    """Load a result artifact back into the typed records used for reporting."""
+    results: list[UtteranceResult] = []
+    with open(path, newline="", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            results.append(
+                UtteranceResult(
+                    backend_id=row["backend_id"],
+                    eval_id=row["eval_id"],
+                    status=row["status"],
+                    from_cache=row.get("from_cache", "0") in ("1", "true", "True"),
+                    inference_seconds=_maybe_float(row.get("inference_seconds")),
+                    audio_seconds=_maybe_float(row.get("audio_seconds")),
+                    rtf=_maybe_float(row.get("rtf")),
+                    raw_reference=row.get("raw_reference", ""),
+                    raw_hypothesis=row.get("raw_hypothesis", ""),
+                    normalized_reference=row.get("normalized_reference", ""),
+                    normalized_hypothesis=row.get("normalized_hypothesis", ""),
+                    hits=_maybe_int(row.get("hits")),
+                    substitutions=_maybe_int(row.get("substitutions")),
+                    deletions=_maybe_int(row.get("deletions")),
+                    insertions=_maybe_int(row.get("insertions")),
+                    reference_words=_maybe_int(row.get("reference_words")),
+                    wer=_maybe_float(row.get("wer")),
+                    error_category=row.get("error_category") or None,
+                    error_message=row.get("error_message") or None,
+                    attempts=int(row.get("attempts") or 1),
+                )
+            )
+    return results
+
+
 def _fmt(x: float | None) -> str:
     return "" if x is None else f"{x:.6f}"
 
 
 def _blank(x: int | None) -> str | int:
     return "" if x is None else x
+
+
+def _maybe_float(value: str | None) -> float | None:
+    return None if value in (None, "") else float(value)
+
+
+def _maybe_int(value: str | None) -> int | None:
+    return None if value in (None, "") else int(value)
 
 
 # --- aggregation helpers ----------------------------------------------------
@@ -232,7 +272,7 @@ def write_summary_md(
     a("- Text normalized with Whisper's `EnglishTextNormalizer` before scoring.")
     a("- WER/edit counts from `jiwer`. Corpus WER (aggregate edits) is the primary figure.")
     a("- Per-utterance timing wraps only the backend call; startup is measured separately.")
-    a("- ElevenLabs timing is API end-to-end latency (upload + network + service + download).\n")
+    a("- Cloud timing is API end-to-end latency (upload + network + service + download).\n")
 
     a("## Per-backend results (each backend over its own successes)\n")
     a("RTF is measured only over utterances freshly transcribed this run; "

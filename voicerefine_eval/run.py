@@ -8,6 +8,7 @@ CSV / run manifest / summary outputs plus console progress and worst-10.
 Usage:
     uv run python -m voicerefine_eval.run [--debug] [--no-cache]
         [--backends id1,id2] [--limit N] [--resample-subset]
+        [--output-dir results/runs/my-run]
 """
 
 from __future__ import annotations
@@ -22,7 +23,7 @@ from .audio import describe_prepared, prepare_audio, prepared_path_for
 from .backends import build_backend
 from .backends.base import ASRBackend, BackendUnavailableError, TranscriptionError
 from .cache import TranscriptCache
-from .config import EvalConfig, load_config
+from .config import REPO_ROOT, EvalConfig, load_config
 from .dataset import (
     SubsetEntry,
     build_manifest,
@@ -31,12 +32,10 @@ from .dataset import (
     validate_schema,
 )
 from .hashing import write_json_atomic
-from .manifest import RUN_MANIFEST_PATH, build_run_manifest
+from .manifest import build_run_manifest
 from .metrics import score_utterance
 from .normalize import normalize_text
 from .report import (
-    PER_UTTERANCE_CSV,
-    SUMMARY_MD,
     print_worst_utterances,
     shared_success_metrics,
     summarize_backend,
@@ -77,6 +76,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument("--resample-subset", action="store_true",
                    help="Rebuild data/subset_manifest.json from scratch (re-sample).")
     p.add_argument("--config", type=str, default=None, help="Path to eval.toml.")
+    p.add_argument(
+        "--output-dir",
+        type=str,
+        default="results",
+        help="Directory for this run's CSV, summary, and manifest (relative to repo root).",
+    )
     return p.parse_args(argv)
 
 
@@ -238,6 +243,12 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     _force_utf8_console()
     cfg = load_config(Path(args.config) if args.config else None)
+    output_dir = Path(args.output_dir)
+    if not output_dir.is_absolute():
+        output_dir = (REPO_ROOT / output_dir).resolve()
+    per_utterance_csv = output_dir / "per_utterance.csv"
+    run_manifest_path = output_dir / "run_manifest.json"
+    summary_md = output_dir / "summary.md"
     started_at = _utcnow()
 
     # 1) Subset manifest (committed, frozen).
@@ -303,7 +314,7 @@ def main(argv: list[str] | None = None) -> int:
 
     # 4) Aggregate + write outputs.
     all_results = [r for rs in results_by_backend.values() for r in rs]
-    write_per_utterance_csv(all_results)
+    write_per_utterance_csv(all_results, per_utterance_csv)
 
     shared_ids, shared_metrics = shared_success_metrics(results_by_backend)
 
@@ -311,13 +322,22 @@ def main(argv: list[str] | None = None) -> int:
     run_manifest = build_run_manifest(
         cfg,
         backend_signatures=backend_signatures,
+        backend_summaries={
+            bid: {
+                "available": summary.available,
+                "startup_seconds": summary.startup_seconds,
+                "success_count": summary.success_count,
+                "failure_count": summary.failure_count,
+            }
+            for bid, summary in summaries.items()
+        },
         started_at=started_at,
         completed_at=completed_at,
         cache_enabled=not args.no_cache,
         subset_size=len(entries),
         debug=args.debug,
     )
-    write_json_atomic(RUN_MANIFEST_PATH, run_manifest)
+    write_json_atomic(run_manifest_path, run_manifest)
 
     write_summary_md(
         summaries=summaries,
@@ -329,10 +349,11 @@ def main(argv: list[str] | None = None) -> int:
         seed=cfg.dataset.seed,
         subset_size=len(entries),
         debug=args.debug,
+        path=summary_md,
     )
 
     _print_final_summary(summaries, shared_ids)
-    print(f"\nWrote:\n  {PER_UTTERANCE_CSV}\n  {RUN_MANIFEST_PATH}\n  {SUMMARY_MD}")
+    print(f"\nWrote:\n  {per_utterance_csv}\n  {run_manifest_path}\n  {summary_md}")
     return 0
 
 

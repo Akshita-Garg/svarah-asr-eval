@@ -16,6 +16,8 @@ from pathlib import Path
 from typing import Any
 
 from .config import REPO_ROOT, EvalConfig
+from .dataset import MANIFEST_PATH
+from .hashing import sha256_file
 
 RUN_MANIFEST_PATH = REPO_ROOT / "results" / "run_manifest.json"
 
@@ -73,6 +75,7 @@ def build_run_manifest(
     cfg: EvalConfig,
     *,
     backend_signatures: dict[str, dict[str, Any]],
+    backend_summaries: dict[str, dict[str, Any]],
     started_at: str,
     completed_at: str,
     cache_enabled: bool,
@@ -90,6 +93,7 @@ def build_run_manifest(
             "seed": cfg.dataset.seed,
             "subset_size": subset_size,
             "debug": debug,
+            "subset_manifest_sha256": sha256_file(MANIFEST_PATH),
         },
         "python": {
             "version": sys.version.split()[0],
@@ -104,6 +108,7 @@ def build_run_manifest(
             "cpu_count": _safe_cpu_count(),
         },
         "backends": backend_signatures,
+        "backend_summaries": backend_summaries,
         "timing": {"started_at": started_at, "completed_at": completed_at},
         "cache": {"enabled": cache_enabled},
     }
