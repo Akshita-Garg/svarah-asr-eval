@@ -179,3 +179,19 @@ def test_cloud_model_id_is_not_resolved_as_a_file_path():
     cfg = load_config()
     assert cfg.backends["sarvam_saaras_v4"].settings["model"] == "saaras:v4"
     assert Path(cfg.backends["crisp_v0823_parakeet_q4k"].settings["model"]).is_absolute()
+
+
+def test_whisper_medium_matches_controlled_local_protocol():
+    cfg = load_config()
+    medium = cfg.backends["crisp_v0823_whisper_medium_en_q4k"]
+
+    assert medium.type == "crispasr_server"
+    assert medium.settings["backend"] == "whisper"
+    assert medium.settings["language"] == "en"
+    assert medium.settings["threads"] == 8
+    assert medium.settings["gpu_backend"] == "cpu"
+    assert medium.settings["quantization"] == "q4_k"
+    assert medium.settings["no_punctuation"] is False
+    assert medium.settings["runtime_version"] == "0.8.23"
+    assert medium.settings["runtime_git_sha"] == "7d22deec"
+    assert Path(medium.settings["model"]).name == "ggml-medium.en-q4_k.bin"

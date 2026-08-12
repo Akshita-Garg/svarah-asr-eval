@@ -25,6 +25,7 @@ debug_subset_size = 20
 [backends]
 active = [
     "crisp_v0823_whisper_base_en_q4k",
+    "crisp_v0823_whisper_medium_en_q4k",
     "crisp_v0823_parakeet_q4k",
     "crisp_v0823_cohere_q4k",
 ]
@@ -104,6 +105,25 @@ threads = 8
 gpu_backend = "cpu"
 quantization = "q4_k"
 no_punctuation = false       # Whisper supplies native punctuation in v0.8.23.
+runtime_version = "0.8.23"
+runtime_git_sha = "7d22deec"
+host = "127.0.0.1"
+port = 51234
+start_timeout_ms = 30000
+request_timeout_ms = 180000
+
+# Medium English provides a capacity-matched Whisper comparison for Parakeet.
+# It keeps every execution control identical to the Base English run.
+[backends.crisp_v0823_whisper_medium_en_q4k]
+type = "crispasr_server"
+bin = "models/crispasr-v0.8.23/runtime/crispasr-windows-x86_64-cpu/crispasr.exe"
+model = "models/whisper-medium.en-GGML/ggml-medium.en-q4_k.bin"
+backend = "whisper"
+language = "en"
+threads = 8
+gpu_backend = "cpu"
+quantization = "q4_k"
+no_punctuation = false       # Match the Base run's native Whisper output path.
 runtime_version = "0.8.23"
 runtime_git_sha = "7d22deec"
 host = "127.0.0.1"

@@ -11,10 +11,10 @@ Indian-English dataset.
 
 See `DESIGN.md` for the methodology and `BUILD_LOG.md` for a step-by-step account
 of how this was built (including the manual steps and pitfalls). The current
-five-system results are in
-[`results/comparisons/v0823-five-system/summary.md`](results/comparisons/v0823-five-system/summary.md),
+six-system results are in
+[`results/comparisons/v0823-six-system/summary.md`](results/comparisons/v0823-six-system/summary.md),
 with conclusions in
-[`interpretation.md`](results/comparisons/v0823-five-system/interpretation.md).
+[`interpretation.md`](results/comparisons/v0823-six-system/interpretation.md).
 For an intuitive explanation of the complete pipeline, metrics, timing boundary,
 runtime architecture, and learning resources, read
 [`UNDERSTANDING_THE_EVALUATION.md`](UNDERSTANDING_THE_EVALUATION.md).
@@ -24,15 +24,17 @@ runtime architecture, and learning resources, read
 | Backend ID | System | Runtime |
 | --- | --- | --- |
 | `crisp_v0823_whisper_base_en_q4k` | Whisper Base English Q4_K | CrispASR 0.8.23 server, CPU, 8 threads |
+| `crisp_v0823_whisper_medium_en_q4k` | Whisper Medium English Q4_K | CrispASR 0.8.23 server, CPU, 8 threads |
 | `crisp_v0823_parakeet_q4k` | Parakeet TDT 0.6B v3 Q4_K | CrispASR 0.8.23 server, CPU, 8 threads |
 | `crisp_v0823_cohere_q4k` | Cohere Transcribe Q4_K | CrispASR 0.8.23 server, CPU, 8 threads |
 | `elevenlabs_scribe_v2` | ElevenLabs Scribe v2 | Speech-to-Text API; preserved baseline results |
 | `sarvam_saaras_v4` | Sarvam Saaras v4 | Speech-to-Text API, `en-IN` |
 
-The three controlled local backends use the same runtime version, server mode,
+The four controlled local backends use the same runtime version, server mode,
 thread count, CPU backend, prepared WAVs, warm-up rule, and timing boundary.
 Whisper Base replaces Tiny because Tiny's width cannot be represented by the
-legacy Whisper Q4_K format accepted by CrispASR. See `BUILD_LOG.md`, Phase 17.
+legacy Whisper Q4_K format accepted by CrispASR. Medium adds a capacity-matched
+Whisper comparison for Parakeet. See `BUILD_LOG.md`, Phases 17 and 22.
 
 ## Prerequisites
 
@@ -40,7 +42,7 @@ legacy Whisper Q4_K format accepted by CrispASR. See `BUILD_LOG.md`, Phase 17.
    **not** work — the ASR runtime (`sherpa-onnx-core`) has no wheels for them yet
    (see Troubleshooting).
 2. **Local runtime and model artifacts.** The config points to the gitignored
-   CrispASR 0.8.23 runtime and Whisper model under `models/`, plus Parakeet and
+   CrispASR 0.8.23 runtime and Whisper models under `models/`, plus Parakeet and
    Cohere artifacts in the sibling VoiceRefine Desktop checkout. Paths can be
    overridden with the `VOICEREFINE_*` variables in `.env`.
 3. **HuggingFace access** to the gated Svarah dataset (token + accepted terms).
