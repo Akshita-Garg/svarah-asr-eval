@@ -15,6 +15,9 @@ five-system results are in
 [`results/comparisons/v0823-five-system/summary.md`](results/comparisons/v0823-five-system/summary.md),
 with conclusions in
 [`interpretation.md`](results/comparisons/v0823-five-system/interpretation.md).
+For an intuitive explanation of the complete pipeline, metrics, timing boundary,
+runtime architecture, and learning resources, read
+[`UNDERSTANDING_THE_EVALUATION.md`](UNDERSTANDING_THE_EVALUATION.md).
 
 ## Systems under test
 
