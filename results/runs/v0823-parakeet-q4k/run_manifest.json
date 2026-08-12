@@ -1,0 +1,71 @@
+{
+  "git": {
+    "commit": "62f356a1fc91d1a9029bc4586b4a5dc10e0d510e",
+    "dirty": true
+  },
+  "dataset": {
+    "name": "ai4bharat/Svarah",
+    "revision": "ebbf7777fe771490696a3f7b007097606fa8c924",
+    "split": "test",
+    "seed": 42,
+    "subset_size": 200,
+    "debug": false,
+    "subset_manifest_sha256": "f9354148a0aaa05ee9afe003d22668a47fdf6bc40a73875af04b504ff3a66f00"
+  },
+  "python": {
+    "version": "3.12.13",
+    "implementation": "CPython"
+  },
+  "dependencies": {
+    "datasets": "5.0.1",
+    "jiwer": "4.0.0",
+    "numpy": "2.5.2",
+    "sherpa-onnx": "1.13.4",
+    "sherpa-onnx-core": "1.13.4",
+    "soundfile": "0.14.0",
+    "soxr": "1.1.0",
+    "whisper-normalizer": "0.1.15",
+    "requests": "2.34.2"
+  },
+  "platform": {
+    "system": "Windows",
+    "release": "11",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 140 Stepping 1, GenuineIntel",
+    "cpu_count": 8
+  },
+  "backends": {
+    "crisp_v0823_parakeet_q4k": {
+      "backend_id": "crisp_v0823_parakeet_q4k",
+      "type": "crispasr_server",
+      "runtime": "persistent_server",
+      "runtime_version": "0.8.23",
+      "runtime_git_sha": "7d22deec",
+      "backend": "parakeet",
+      "language": "en",
+      "threads": 8,
+      "gpu_backend": "cpu",
+      "quantization": "q4_k",
+      "no_punctuation": false,
+      "hashes": {
+        "model": "1a60f6e53e5781240dde6e69a47a47a8a71995a3a106517b009225afcc514457",
+        "bin": "7276a38caab4d8440263d4e808b2adcc785596ffb2a5998cef9e28ec22fb389e"
+      }
+    }
+  },
+  "backend_summaries": {
+    "crisp_v0823_parakeet_q4k": {
+      "available": true,
+      "startup_seconds": 8.838012099964544,
+      "success_count": 200,
+      "failure_count": 0
+    }
+  },
+  "timing": {
+    "started_at": "2026-08-12T00:08:38.069628+00:00",
+    "completed_at": "2026-08-12T00:16:14.849592+00:00"
+  },
+  "cache": {
+    "enabled": false
+  }
+}
