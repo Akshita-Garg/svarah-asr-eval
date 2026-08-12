@@ -28,6 +28,10 @@ def build_backend(cfg: BackendConfig) -> ASRBackend:
         from .sarvam import SarvamBackend
 
         return SarvamBackend(cfg)
+    if cfg.type == "smallest":
+        from .smallest import SmallestBackend
+
+        return SmallestBackend(cfg)
     raise ValueError(f"Unknown backend type: {cfg.type!r} for {cfg.backend_id}")
 
 

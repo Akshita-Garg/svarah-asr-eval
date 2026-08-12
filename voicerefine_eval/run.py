@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as _dt
+import json
 import sys
 import time
 from pathlib import Path
@@ -31,12 +32,13 @@ from .dataset import (
     select_entries,
     validate_schema,
 )
-from .hashing import write_json_atomic
+from .hashing import sha256_file, write_json_atomic
 from .manifest import build_run_manifest
 from .metrics import score_utterance
 from .normalize import normalize_text
 from .report import (
     print_worst_utterances,
+    read_per_utterance_csv,
     shared_success_metrics,
     summarize_backend,
     write_per_utterance_csv,
@@ -81,6 +83,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         type=str,
         default="results",
         help="Directory for this run's CSV, summary, and manifest (relative to repo root).",
+    )
+    p.add_argument(
+        "--resume-from",
+        type=str,
+        default=None,
+        help="Prior run directory: retain its successes and retry only failures.",
     )
     return p.parse_args(argv)
 
@@ -138,6 +146,7 @@ def run_backend(
     entries: list[SubsetEntry],
     prepared: dict[str, PreparedInfo],
     cache: TranscriptCache,
+    resumed_successes: dict[str, UtteranceResult] | None = None,
 ) -> list[UtteranceResult]:
     """Warm up (local), then transcribe/score every utterance for one backend."""
     signature = backend.cache_signature()
@@ -155,6 +164,12 @@ def run_backend(
 
     for i, e in enumerate(entries, 1):
         info = prepared[e.eval_id]
+        resumed = (resumed_successes or {}).get(e.eval_id)
+        if resumed is not None:
+            results.append(resumed)
+            print(f"  [{backend.name}] {i}/{len(entries)} {e.eval_id} (resumed success)")
+            continue
+
         key = cache.make_key(signature=signature, eval_id=e.eval_id, audio_sha256=info.sha256)
 
         cached_text = cache.get(key)
@@ -167,6 +182,7 @@ def run_backend(
             continue
 
         try:
+            backend.prepare_request()
             t0 = time.perf_counter()
             raw = backend.transcribe(info.path)
             inference_seconds = time.perf_counter() - t0
@@ -182,11 +198,77 @@ def run_backend(
         # Cache the RAW transcript before normalization/scoring (DESIGN).
         cache.put(key, text=raw, eval_id=e.eval_id, audio_sha256=info.sha256, signature=signature)
         results.append(_score_result(backend.name, e, raw, info, from_cache=False,
-                                      inference_seconds=inference_seconds))
+                                      inference_seconds=inference_seconds,
+                                      attempts=backend.last_attempts))
         print(f"  [{backend.name}] {i}/{len(entries)} {e.eval_id} wer="
               f"{results[-1].wer:.3f} rtf={results[-1].rtf:.2f}")
 
     return results
+
+
+def _load_resume(
+    resume_dir: Path,
+    *,
+    backend_id: str,
+    signature: dict,
+    entries: list[SubsetEntry],
+    cfg: EvalConfig,
+    debug: bool,
+) -> tuple[dict[str, UtteranceResult], dict]:
+    """Validate a prior run and return only successful rows to carry forward."""
+    manifest_path = resume_dir / "run_manifest.json"
+    csv_path = resume_dir / "per_utterance.csv"
+    if not manifest_path.exists() or not csv_path.exists():
+        raise ValueError(f"Resume directory is missing run artifacts: {resume_dir}")
+
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    dataset = manifest.get("dataset", {})
+    expected_dataset = {
+        "name": cfg.dataset.name,
+        "revision": cfg.dataset.revision,
+        "split": cfg.dataset.split,
+        "seed": cfg.dataset.seed,
+        "subset_size": len(entries),
+        "debug": debug,
+    }
+    for key, expected in expected_dataset.items():
+        if dataset.get(key) != expected:
+            raise ValueError(
+                f"Resume dataset mismatch for {key}: {dataset.get(key)!r} != {expected!r}"
+            )
+
+    previous_signature = manifest.get("backends", {}).get(backend_id)
+    if not isinstance(previous_signature, dict):
+        raise ValueError(f"Resume run does not contain backend {backend_id}")
+    # A resumed run may add execution-only pacing. Every setting recorded by the
+    # source must still match, while new settings are allowed and re-recorded.
+    for key, previous in previous_signature.items():
+        if signature.get(key) != previous:
+            raise ValueError(f"Resume backend mismatch for {key}")
+
+    rows = read_per_utterance_csv(csv_path)
+    expected = {entry.eval_id: entry for entry in entries}
+    if len(rows) != len(entries) or {row.eval_id for row in rows} != set(expected):
+        raise ValueError("Resume run does not contain exactly the selected utterance set")
+    for row in rows:
+        if row.backend_id != backend_id:
+            raise ValueError(f"Unexpected backend in resume rows: {row.backend_id}")
+        if row.raw_reference != expected[row.eval_id].reference:
+            raise ValueError(f"Reference mismatch in resume row {row.eval_id}")
+
+    successes = {row.eval_id: row for row in rows if row.ok}
+    try:
+        source_path = resume_dir.resolve().relative_to(REPO_ROOT).as_posix()
+    except ValueError:
+        source_path = str(resume_dir.resolve())
+    provenance = {
+        "source_path": source_path,
+        "run_manifest_sha256": sha256_file(manifest_path),
+        "per_utterance_sha256": sha256_file(csv_path),
+        "retained_successes": len(successes),
+        "retried_failures": len(rows) - len(successes),
+    }
+    return successes, provenance
 
 
 def _score_result(
@@ -197,6 +279,7 @@ def _score_result(
     *,
     from_cache: bool,
     inference_seconds: float | None,
+    attempts: int = 1,
 ) -> UtteranceResult:
     norm_ref = normalize_text(entry.reference)
     norm_hyp = normalize_text(raw_hypothesis)
@@ -221,6 +304,7 @@ def _score_result(
         insertions=s.insertions,
         reference_words=s.reference_words,
         wer=s.wer,
+        attempts=attempts,
     )
 
 
@@ -268,16 +352,38 @@ def main(argv: list[str] | None = None) -> int:
         else list(cfg.active_backend_ids)
     )
     cache = TranscriptCache(enabled=not args.no_cache)
+    resume_dir = None
+    if args.resume_from:
+        resume_dir = Path(args.resume_from)
+        if not resume_dir.is_absolute():
+            resume_dir = (REPO_ROOT / resume_dir).resolve()
+        if len(active_ids) != 1:
+            raise ValueError("--resume-from requires exactly one selected backend")
 
     results_by_backend: dict[str, list[UtteranceResult]] = {}
     summaries = {}
     backend_signatures: dict[str, dict] = {}
+    resume_provenance: dict | None = None
 
     for backend_id in active_ids:
         if backend_id not in cfg.backends:
             print(f"[skip] Unknown backend id in config: {backend_id}")
             continue
         backend = build_backend(cfg.backends[backend_id])
+        resumed_successes: dict[str, UtteranceResult] = {}
+        if resume_dir is not None:
+            resumed_successes, resume_provenance = _load_resume(
+                resume_dir,
+                backend_id=backend_id,
+                signature=backend.cache_signature(),
+                entries=entries,
+                cfg=cfg,
+                debug=args.debug,
+            )
+            print(
+                f"Resume: retaining {len(resumed_successes)} successes and retrying "
+                f"{len(entries) - len(resumed_successes)} failures."
+            )
 
         if not backend.is_available():
             print(f"[skip] Backend '{backend_id}' is unavailable "
@@ -301,7 +407,13 @@ def main(argv: list[str] | None = None) -> int:
             continue
 
         try:
-            results = run_backend(backend, entries, prepared, cache)
+            results = run_backend(
+                backend,
+                entries,
+                prepared,
+                cache,
+                resumed_successes=resumed_successes,
+            )
         finally:
             backend.close()
 
@@ -337,6 +449,8 @@ def main(argv: list[str] | None = None) -> int:
         subset_size=len(entries),
         debug=args.debug,
     )
+    if resume_provenance is not None:
+        run_manifest["resume"] = resume_provenance
     write_json_atomic(run_manifest_path, run_manifest)
 
     write_summary_md(

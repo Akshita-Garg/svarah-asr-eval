@@ -7,6 +7,7 @@ from voicerefine_eval.backends import build_backend
 from voicerefine_eval.backends.base import TranscriptionError
 from voicerefine_eval.backends.parakeet_crispasr import CrispAsrServerBackend
 from voicerefine_eval.backends.sarvam import SarvamBackend
+from voicerefine_eval.backends.smallest import SmallestBackend
 from voicerefine_eval.config import BackendConfig, load_config
 
 
@@ -195,3 +196,104 @@ def test_whisper_medium_matches_controlled_local_protocol():
     assert medium.settings["runtime_version"] == "0.8.23"
     assert medium.settings["runtime_git_sha"] == "7d22deec"
     assert Path(medium.settings["model"]).name == "ggml-medium.en-q4_k.bin"
+
+
+def _smallest_config() -> BackendConfig:
+    return BackendConfig(
+        "smallest_pulse_pro",
+        "smallest",
+        {
+            "model": "pulse-pro",
+            "language": "en",
+            "base_url": "https://api.smallest.ai/waves/v1/stt/",
+            "max_retries": 2,
+            "backoff_base_seconds": 0,
+        },
+    )
+
+
+def test_smallest_sends_raw_audio_without_leaking_key(tmp_path, monkeypatch):
+    audio = tmp_path / "audio.wav"
+    audio.write_bytes(b"wav-bytes")
+    monkeypatch.delenv("SMALLEST_API_KEY", raising=False)
+    monkeypatch.setenv("SMALLESTAI_API_KEY", "secret-key")
+    captured = {}
+
+    def fake_post(url, **kwargs):
+        captured.update(url=url, **kwargs)
+        return _Response(payload={"transcription": "  hello world  "})
+
+    monkeypatch.setattr("voicerefine_eval.backends.smallest.requests.post", fake_post)
+    backend = SmallestBackend(_smallest_config())
+    backend.start()
+
+    assert backend.transcribe(audio) == "hello world"
+    assert captured["url"] == "https://api.smallest.ai/waves/v1/stt/"
+    assert captured["params"] == {"model": "pulse-pro", "language": "en"}
+    assert captured["headers"]["Authorization"] == "Bearer secret-key"
+    assert captured["headers"]["Content-Type"] == "application/octet-stream"
+    assert captured["data"] == b"wav-bytes"
+    assert "secret-key" not in str(backend.cache_signature())
+
+
+def test_smallest_prefers_official_key_name(monkeypatch):
+    monkeypatch.setenv("SMALLEST_API_KEY", "official-key")
+    monkeypatch.setenv("SMALLESTAI_API_KEY", "alias-key")
+    backend = SmallestBackend(_smallest_config())
+    backend.start()
+    assert backend._api_key == "official-key"
+
+
+def test_smallest_retries_rate_limit(tmp_path, monkeypatch):
+    audio = tmp_path / "audio.wav"
+    audio.write_bytes(b"wav")
+    monkeypatch.setenv("SMALLEST_API_KEY", "secret-key")
+    responses = iter([
+        _Response(status_code=429, text="slow down", headers={"Retry-After": "0"}),
+        _Response(payload={"transcription": "recovered"}),
+    ])
+
+    monkeypatch.setattr(
+        "voicerefine_eval.backends.smallest.requests.post",
+        lambda *args, **kwargs: next(responses),
+    )
+    monkeypatch.setattr("voicerefine_eval.backends.smallest.time.sleep", lambda seconds: None)
+    backend = SmallestBackend(_smallest_config())
+    backend.start()
+    assert backend.transcribe(audio) == "recovered"
+    assert backend.last_attempts == 2
+
+
+def test_smallest_does_not_retry_terminal_client_error(tmp_path, monkeypatch):
+    audio = tmp_path / "audio.wav"
+    audio.write_bytes(b"wav")
+    monkeypatch.setenv("SMALLEST_API_KEY", "secret-key")
+    calls = 0
+
+    def fake_post(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        return _Response(status_code=401, text="unauthorized")
+
+    monkeypatch.setattr("voicerefine_eval.backends.smallest.requests.post", fake_post)
+    backend = SmallestBackend(_smallest_config())
+    backend.start()
+    with pytest.raises(TranscriptionError, match="Smallest.ai 401"):
+        backend.transcribe(audio)
+    assert calls == 1
+
+
+def test_smallest_pacing_uses_untimed_prepare_hook(monkeypatch):
+    cfg = _smallest_config()
+    cfg.settings["min_request_interval_seconds"] = 3.5
+    backend = SmallestBackend(cfg)
+    monotonic = iter([10.0, 10.0, 11.0, 13.5])
+    sleeps = []
+    monkeypatch.setattr("voicerefine_eval.backends.smallest.time.monotonic", lambda: next(monotonic))
+    monkeypatch.setattr("voicerefine_eval.backends.smallest.time.sleep", sleeps.append)
+
+    backend.prepare_request()
+    backend.prepare_request()
+
+    assert sleeps == [2.5]
+    assert backend.cache_signature()["min_request_interval_seconds"] == 3.5

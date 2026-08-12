@@ -25,7 +25,6 @@ debug_subset_size = 20
 [backends]
 active = [
     "crisp_v0823_whisper_base_en_q4k",
-    "crisp_v0823_whisper_medium_en_q4k",
     "crisp_v0823_parakeet_q4k",
     "crisp_v0823_cohere_q4k",
 ]
@@ -185,6 +184,19 @@ model = "saaras:v4"
 language_code = "en-IN"
 # API key comes from env SARVAM_API_KEY (never stored in this file).
 base_url = "https://api.sarvam.ai/speech-to-text"
+max_retries = 5
+backoff_base_seconds = 1.0
+backoff_max_seconds = 30.0
+request_timeout_seconds = 300
+
+[backends.smallest_pulse_pro]
+type = "smallest"
+model = "pulse-pro"
+language = "en"
+base_url = "https://api.smallest.ai/waves/v1/stt/"
+# Batch-only pacing stays outside the timed API-call boundary. It prevents this
+# personal-project evaluation from exceeding the workspace's sustained limit.
+min_request_interval_seconds = 4.0
 max_retries = 5
 backoff_base_seconds = 1.0
 backoff_max_seconds = 30.0

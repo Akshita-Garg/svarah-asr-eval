@@ -49,6 +49,7 @@ class ASRBackend(abc.ABC):
         self.cfg = cfg
         self.name = cfg.backend_id
         self.settings = cfg.settings
+        self.last_attempts = 1
 
     @abc.abstractmethod
     def is_available(self) -> bool:
@@ -61,6 +62,15 @@ class ASRBackend(abc.ABC):
     @abc.abstractmethod
     def transcribe(self, audio_path: Path) -> str:
         ...
+
+    def prepare_request(self) -> None:
+        """Perform untimed benchmark coordination immediately before a call.
+
+        Normal backends do nothing. A rate-limited cloud backend may sleep here
+        to keep a sequential batch within its workspace limit without counting
+        artificial benchmark pacing as user-facing request latency.
+        """
+        return None
 
     def close(self) -> None:  # default: nothing to release
         return None
