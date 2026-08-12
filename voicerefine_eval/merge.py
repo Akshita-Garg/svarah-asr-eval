@@ -31,6 +31,14 @@ def _resolve(path: str) -> Path:
     return candidate.resolve() if candidate.is_absolute() else (REPO_ROOT / candidate).resolve()
 
 
+def _portable_path(path: Path) -> str:
+    """Prefer a repository-relative path in committed comparison metadata."""
+    try:
+        return path.resolve().relative_to(REPO_ROOT).as_posix()
+    except ValueError:
+        return str(path.resolve())
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Merge VoiceRefine evaluation runs")
     parser.add_argument("--inputs", required=True, help="Comma-separated run directories")
@@ -191,7 +199,7 @@ def merge_runs(
         "dataset": expected_dataset,
         "source_runs": [
             {
-                "path": str(run_dir),
+                "path": _portable_path(run_dir),
                 "run_manifest_sha256": sha256_file(run_dir / "run_manifest.json"),
                 "per_utterance_sha256": sha256_file(run_dir / "per_utterance.csv"),
             }

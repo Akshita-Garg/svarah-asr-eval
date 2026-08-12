@@ -10,30 +10,39 @@ Indian-English dataset.
 > dictation experience.
 
 See `DESIGN.md` for the methodology and `BUILD_LOG.md` for a step-by-step account
-of how this was built (including the manual steps and pitfalls).
+of how this was built (including the manual steps and pitfalls). The current
+five-system results are in
+[`results/comparisons/v0823-five-system/summary.md`](results/comparisons/v0823-five-system/summary.md),
+with conclusions in
+[`interpretation.md`](results/comparisons/v0823-five-system/interpretation.md).
 
 ## Systems under test
 
 | Backend ID | System | Runtime |
 | --- | --- | --- |
-| `voicerefine_whisper_tiny_int8` | Whisper Tiny English INT8 ONNX | sherpa-onnx, CPU, 4 threads |
-| `voicerefine_parakeet_q4` | Parakeet TDT 0.6B v3 Q4 GGUF | persistent CrispASR server, CPU, 8 threads |
-| `elevenlabs_scribe_v2` | ElevenLabs Scribe v2 | batch Speech-to-Text API |
+| `crisp_v0823_whisper_base_en_q4k` | Whisper Base English Q4_K | CrispASR 0.8.23 server, CPU, 8 threads |
+| `crisp_v0823_parakeet_q4k` | Parakeet TDT 0.6B v3 Q4_K | CrispASR 0.8.23 server, CPU, 8 threads |
+| `crisp_v0823_cohere_q4k` | Cohere Transcribe Q4_K | CrispASR 0.8.23 server, CPU, 8 threads |
+| `elevenlabs_scribe_v2` | ElevenLabs Scribe v2 | Speech-to-Text API; preserved baseline results |
+| `sarvam_saaras_v4` | Sarvam Saaras v4 | Speech-to-Text API, `en-IN` |
 
-The two local backends use the **same model artifacts and runtime configuration
-as VoiceRefine Desktop** (see `config/eval.toml`).
+The three controlled local backends use the same runtime version, server mode,
+thread count, CPU backend, prepared WAVs, warm-up rule, and timing boundary.
+Whisper Base replaces Tiny because Tiny's width cannot be represented by the
+legacy Whisper Q4_K format accepted by CrispASR. See `BUILD_LOG.md`, Phase 17.
 
 ## Prerequisites
 
 1. **Python 3.12** and [uv](https://docs.astral.sh/uv/). Python 3.13/3.14 do
    **not** work — the ASR runtime (`sherpa-onnx-core`) has no wheels for them yet
    (see Troubleshooting).
-2. **VoiceRefine Desktop artifacts.** By default the config points at a sibling
-   checkout `../voicerefine-desktop/resources/...` for the Parakeet GGUF, the
-   CrispASR binary, and the Whisper Tiny ONNX model. If yours live elsewhere,
-   set the `VOICEREFINE_*` variables in `.env` (see `.env.example`).
+2. **Local runtime and model artifacts.** The config points to the gitignored
+   CrispASR 0.8.23 runtime and Whisper model under `models/`, plus Parakeet and
+   Cohere artifacts in the sibling VoiceRefine Desktop checkout. Paths can be
+   overridden with the `VOICEREFINE_*` variables in `.env`.
 3. **HuggingFace access** to the gated Svarah dataset (token + accepted terms).
-4. **ElevenLabs API key** (optional — that backend skips cleanly without one).
+4. **Sarvam API key** for a new cloud run. The final ElevenLabs rows are reused
+   from the preserved baseline and do not require another paid API call.
 
 ## Setup
 
@@ -53,17 +62,18 @@ To use the gated dataset you must first accept its terms while logged in at
 # Fast sanity check on the 20-utterance debug subset:
 uv run python -m voicerefine_eval.run --debug
 
-# Full 200-utterance evaluation:
+# Full 200-utterance controlled local evaluation:
 uv run python -m voicerefine_eval.run
 
 # Run only specific backends:
-uv run python -m voicerefine_eval.run --debug --backends voicerefine_whisper_tiny_int8
+uv run python -m voicerefine_eval.run --debug --backends crisp_v0823_parakeet_q4k
 
 # Force fresh transcription (ignore the cache):
 uv run python -m voicerefine_eval.run --no-cache
 ```
 
-The first run downloads the dataset and prepares 16 kHz mono WAVs under
+Use `--output-dir results/runs/<name>` for an isolated run. The first run
+downloads the dataset and prepares 16 kHz mono WAVs under
 `data/prepared/` (gitignored). Later runs reuse the prepared audio and the
 transcript cache, so re-scoring is fast.
 
@@ -84,8 +94,9 @@ successful utterances per backend.
 uv run pytest
 ```
 
-Covers text normalization (locked against Whisper's `EnglishTextNormalizer`),
-WER edit counts / corpus-vs-mean aggregation, and cache-key invalidation.
+Covers text normalization, WER aggregation, cache invalidation, backend request
+contracts, controlled CrispASR flags/provenance, cloud model-ID handling, and
+safe merging/filtering of immutable run artifacts.
 
 ## Reproducibility
 

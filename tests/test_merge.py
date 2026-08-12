@@ -60,7 +60,8 @@ def test_csv_round_trip_preserves_typed_results(tmp_path):
     assert loaded == original
 
 
-def test_merge_combines_runs_without_rerunning_backends(tmp_path):
+def test_merge_combines_runs_without_rerunning_backends(tmp_path, monkeypatch):
+    monkeypatch.setattr("voicerefine_eval.merge.REPO_ROOT", tmp_path)
     first = _run(tmp_path, "first", "backend-a")
     second = _run(tmp_path, "second", "backend-b")
     output = tmp_path / "combined"
@@ -73,6 +74,7 @@ def test_merge_combines_runs_without_rerunning_backends(tmp_path):
     assert manifest["backend_count"] == 2
     assert manifest["shared_successful_utterances"] == 2
     assert json.loads((output / "comparison_manifest.json").read_text())["row_count"] == 4
+    assert {source["path"] for source in manifest["source_runs"]} == {"first", "second"}
 
 
 def test_merge_rejects_dataset_mismatch(tmp_path):

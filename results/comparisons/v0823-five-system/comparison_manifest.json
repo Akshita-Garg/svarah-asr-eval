@@ -1,0 +1,118 @@
+{
+  "type": "combined_comparison",
+  "created_at": "2026-08-12T00:52:57.812940+00:00",
+  "dataset": {
+    "name": "ai4bharat/Svarah",
+    "revision": "ebbf7777fe771490696a3f7b007097606fa8c924",
+    "split": "test",
+    "seed": 42,
+    "subset_size": 200,
+    "debug": false
+  },
+  "source_runs": [
+    {
+      "path": "results/archive/pre-v0823-baseline-3-models",
+      "run_manifest_sha256": "8478888f09bb5f1e448aa8658f192bd8835eb1873d9b7cd98b249fbad30ab83a",
+      "per_utterance_sha256": "c432b4bf9440d2d94e03f9369e820a4cd0a897c05b90c5372353c7e246829273"
+    },
+    {
+      "path": "results/runs/v0823-whisper-base-en-q4k",
+      "run_manifest_sha256": "f9e13d2f4bd6e4b49dfe5aab1bd37045ad3974f3d04590c975d3337be94b967f",
+      "per_utterance_sha256": "56dc6c0d3c33de49a794df6a50c79d4aad83007842efb99569f1d770e1778587"
+    },
+    {
+      "path": "results/runs/v0823-parakeet-q4k",
+      "run_manifest_sha256": "3d45e41e8d232cc59f68ed6e842f2f3f4d473084d89c56fc3a7d8806ea1b5fe3",
+      "per_utterance_sha256": "e5796d550c4c74cab016bb2fffec71b451bada843c9c2e440a1bf73d454c1918"
+    },
+    {
+      "path": "results/runs/v0823-cohere-q4k",
+      "run_manifest_sha256": "d41a42659690c2ec4ec17a40889561713949f3bf13f99b1613fe4f0ea8440beb",
+      "per_utterance_sha256": "9a387a9ed8d504a16780e7879c97eb97fbab15e4b125f1d0358d9dfce7f7eeeb"
+    },
+    {
+      "path": "results/runs/sarvam-saaras-v4",
+      "run_manifest_sha256": "19595230939c1c5729e61dfa8706b470601e5cdf19b0ca23abf0d688fde1374f",
+      "per_utterance_sha256": "ab327f324e7434626d8dd71f5876911aeef08efa737afa17a0c48a0253752fd5"
+    }
+  ],
+  "selected_backends": [
+    "crisp_v0823_cohere_q4k",
+    "crisp_v0823_parakeet_q4k",
+    "crisp_v0823_whisper_base_en_q4k",
+    "elevenlabs_scribe_v2",
+    "sarvam_saaras_v4"
+  ],
+  "backends": {
+    "elevenlabs_scribe_v2": {
+      "backend_id": "elevenlabs_scribe_v2",
+      "type": "elevenlabs",
+      "model_id": "scribe_v2",
+      "language_code": "eng",
+      "diarize": false,
+      "tag_audio_events": false
+    },
+    "crisp_v0823_whisper_base_en_q4k": {
+      "backend_id": "crisp_v0823_whisper_base_en_q4k",
+      "type": "crispasr_server",
+      "runtime": "persistent_server",
+      "runtime_version": "0.8.23",
+      "runtime_git_sha": "7d22deec",
+      "backend": "whisper",
+      "language": "en",
+      "threads": 8,
+      "gpu_backend": "cpu",
+      "quantization": "q4_k",
+      "no_punctuation": false,
+      "hashes": {
+        "model": "e2be598b0a063bc356c122fdd1a55ab97225c9918f98693d336ef3a690342911",
+        "bin": "7276a38caab4d8440263d4e808b2adcc785596ffb2a5998cef9e28ec22fb389e"
+      }
+    },
+    "crisp_v0823_parakeet_q4k": {
+      "backend_id": "crisp_v0823_parakeet_q4k",
+      "type": "crispasr_server",
+      "runtime": "persistent_server",
+      "runtime_version": "0.8.23",
+      "runtime_git_sha": "7d22deec",
+      "backend": "parakeet",
+      "language": "en",
+      "threads": 8,
+      "gpu_backend": "cpu",
+      "quantization": "q4_k",
+      "no_punctuation": false,
+      "hashes": {
+        "model": "1a60f6e53e5781240dde6e69a47a47a8a71995a3a106517b009225afcc514457",
+        "bin": "7276a38caab4d8440263d4e808b2adcc785596ffb2a5998cef9e28ec22fb389e"
+      }
+    },
+    "crisp_v0823_cohere_q4k": {
+      "backend_id": "crisp_v0823_cohere_q4k",
+      "type": "crispasr_server",
+      "runtime": "persistent_server",
+      "runtime_version": "0.8.23",
+      "runtime_git_sha": "7d22deec",
+      "backend": "cohere",
+      "language": "en",
+      "threads": 8,
+      "gpu_backend": "cpu",
+      "quantization": "q4_k",
+      "no_punctuation": true,
+      "hashes": {
+        "model": "2931fc0ac6d6708eef5389aadf1ebd5eec7b8e764bac385be585e910c0e7b410",
+        "bin": "7276a38caab4d8440263d4e808b2adcc785596ffb2a5998cef9e28ec22fb389e"
+      }
+    },
+    "sarvam_saaras_v4": {
+      "backend_id": "sarvam_saaras_v4",
+      "type": "sarvam",
+      "model": "saaras:v4",
+      "language_code": "en-IN",
+      "base_url": "https://api.sarvam.ai/speech-to-text",
+      "with_timestamps": false
+    }
+  },
+  "backend_count": 5,
+  "row_count": 1000,
+  "shared_successful_utterances": 200
+}
