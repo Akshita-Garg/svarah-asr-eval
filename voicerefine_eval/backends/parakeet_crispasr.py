@@ -39,7 +39,9 @@ class CrispAsrServerBackend(ASRBackend):
         self.threads = int(self.settings.get("threads", 8))
         self.gpu_backend = self.settings.get("gpu_backend", "cpu")
         self.quantization = self.settings.get("quantization")
-        self.no_punctuation = bool(self.settings.get("no_punctuation", True))
+        self.no_punctuation = bool(self.settings.get("no_punctuation", False))
+        self.runtime_version = self.settings.get("runtime_version")
+        self.runtime_git_sha = self.settings.get("runtime_git_sha")
         self.host = self.settings.get("host", "127.0.0.1")
         self.port = int(self.settings.get("port", 51234))
         self.start_timeout_ms = int(self.settings.get("start_timeout_ms", 15000))
@@ -172,6 +174,8 @@ class CrispAsrServerBackend(ASRBackend):
             "backend_id": self.name,
             "type": "crispasr_server",
             "runtime": "persistent_server",
+            "runtime_version": self.runtime_version,
+            "runtime_git_sha": self.runtime_git_sha,
             "backend": self.backend,
             "language": self.language,
             "threads": self.threads,

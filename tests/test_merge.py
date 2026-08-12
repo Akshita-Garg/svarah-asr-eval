@@ -89,3 +89,31 @@ def test_merge_rejects_duplicate_backend_rows(tmp_path):
 
     with pytest.raises(ValueError, match="Duplicate result row"):
         merge_runs([first, second], tmp_path / "combined")
+
+
+def test_merge_can_select_backends_from_multi_backend_source(tmp_path):
+    first = _run(tmp_path, "first", "backend-a")
+    second = _run(tmp_path, "second", "backend-b")
+    output = tmp_path / "combined"
+
+    manifest = merge_runs(
+        [first, second],
+        output,
+        backend_ids={"backend-b"},
+    )
+
+    rows = read_per_utterance_csv(output / "per_utterance.csv")
+    assert {row.backend_id for row in rows} == {"backend-b"}
+    assert manifest["selected_backends"] == ["backend-b"]
+
+
+def test_merge_rejects_missing_selected_backend(tmp_path):
+    first = _run(tmp_path, "first", "backend-a")
+    second = _run(tmp_path, "second", "backend-b")
+
+    with pytest.raises(ValueError, match="Requested backends were not found"):
+        merge_runs(
+            [first, second],
+            tmp_path / "combined",
+            backend_ids={"backend-c"},
+        )

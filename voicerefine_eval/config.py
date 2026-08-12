@@ -118,8 +118,17 @@ def _apply_env_overrides(backend_id: str, type_: str, settings: dict[str, Any]) 
     return s
 
 
-# Keys whose values are filesystem paths, resolved relative to the repo root.
-_PATH_KEYS = {"model_dir", "bin", "model"}
+def _path_keys_for_backend(type_: str) -> set[str]:
+    """Return only settings that are filesystem paths for this backend type.
+
+    Cloud backends use ``model`` as an API identifier (for example,
+    ``saaras:v4``), while CrispASR uses it as an actual model file path.
+    """
+    if type_ == "whisper_sherpa":
+        return {"model_dir"}
+    if type_ == "crispasr_server":
+        return {"bin", "model"}
+    return set()
 
 
 def load_config(config_path: Path | None = None) -> EvalConfig:
@@ -149,7 +158,7 @@ def load_config(config_path: Path | None = None) -> EvalConfig:
         type_ = table["type"]
         settings = {k: v for k, v in table.items() if k != "type"}
         settings = _apply_env_overrides(backend_id, type_, settings)
-        for key in _PATH_KEYS:
+        for key in _path_keys_for_backend(type_):
             if key in settings and isinstance(settings[key], str):
                 settings[key] = str(_resolve(settings[key]))
         backends[backend_id] = BackendConfig(backend_id, type_, settings)

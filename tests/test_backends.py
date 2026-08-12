@@ -7,7 +7,7 @@ from voicerefine_eval.backends import build_backend
 from voicerefine_eval.backends.base import TranscriptionError
 from voicerefine_eval.backends.parakeet_crispasr import CrispAsrServerBackend
 from voicerefine_eval.backends.sarvam import SarvamBackend
-from voicerefine_eval.config import BackendConfig
+from voicerefine_eval.config import BackendConfig, load_config
 
 
 class _FakeProcess:
@@ -57,6 +57,8 @@ def _crisp_config(tmp_path: Path) -> BackendConfig:
             "gpu_backend": "cpu",
             "quantization": "q4_k",
             "no_punctuation": True,
+            "runtime_version": "0.8.23",
+            "runtime_git_sha": "7d22deec",
             "host": "127.0.0.1",
             "port": 51234,
         },
@@ -92,6 +94,8 @@ def test_crispasr_signature_records_resource_controls(tmp_path):
     assert signature["gpu_backend"] == "cpu"
     assert signature["quantization"] == "q4_k"
     assert signature["no_punctuation"] is True
+    assert signature["runtime_version"] == "0.8.23"
+    assert signature["runtime_git_sha"] == "7d22deec"
     assert set(signature["hashes"]) == {"model", "bin"}
 
 
@@ -169,3 +173,9 @@ def test_sarvam_does_not_retry_terminal_client_error(tmp_path, monkeypatch):
     with pytest.raises(TranscriptionError, match="Sarvam 401"):
         backend.transcribe(audio)
     assert calls == 1
+
+
+def test_cloud_model_id_is_not_resolved_as_a_file_path():
+    cfg = load_config()
+    assert cfg.backends["sarvam_saaras_v4"].settings["model"] == "saaras:v4"
+    assert Path(cfg.backends["crisp_v0823_parakeet_q4k"].settings["model"]).is_absolute()

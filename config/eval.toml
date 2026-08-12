@@ -24,9 +24,9 @@ debug_subset_size = 20
 # degradation).
 [backends]
 active = [
-    "voicerefine_whisper_tiny_int8",
-    "voicerefine_parakeet_q4",
-    "elevenlabs_scribe_v2",
+    "crisp_v0823_whisper_base_en_q4k",
+    "crisp_v0823_parakeet_q4k",
+    "crisp_v0823_cohere_q4k",
 ]
 
 # --- Local default: VoiceRefine's lightweight alternative -------------------
@@ -88,6 +88,61 @@ no_punctuation = true
 host = "127.0.0.1"
 port = 51234
 start_timeout_ms = 15000
+request_timeout_ms = 180000
+
+# --- Controlled Q4_K comparison: CrispASR v0.8.23, CPU, 8 threads ----------
+# Whisper Tiny cannot be encoded as a valid legacy Q4_K model because its
+# width (384) is not divisible by the Q4_K block size (256). Base English is
+# the smallest standard Whisper model that satisfies the format constraint.
+[backends.crisp_v0823_whisper_base_en_q4k]
+type = "crispasr_server"
+bin = "models/crispasr-v0.8.23/runtime/crispasr-windows-x86_64-cpu/crispasr.exe"
+model = "models/whisper-base.en-GGML/ggml-base.en-q4_k.bin"
+backend = "whisper"
+language = "en"
+threads = 8
+gpu_backend = "cpu"
+quantization = "q4_k"
+no_punctuation = false       # Whisper supplies native punctuation in v0.8.23.
+runtime_version = "0.8.23"
+runtime_git_sha = "7d22deec"
+host = "127.0.0.1"
+port = 51234
+start_timeout_ms = 30000
+request_timeout_ms = 180000
+
+[backends.crisp_v0823_parakeet_q4k]
+type = "crispasr_server"
+bin = "models/crispasr-v0.8.23/runtime/crispasr-windows-x86_64-cpu/crispasr.exe"
+model = "../voicerefine-desktop/resources/models/parakeet-tdt-0.6b-v3-GGUF/parakeet-tdt-0.6b-v3-q4_k.gguf"
+backend = "parakeet"
+language = "en"
+threads = 8
+gpu_backend = "cpu"
+quantization = "q4_k"
+no_punctuation = false
+runtime_version = "0.8.23"
+runtime_git_sha = "7d22deec"
+host = "127.0.0.1"
+port = 51234
+start_timeout_ms = 30000
+request_timeout_ms = 180000
+
+[backends.crisp_v0823_cohere_q4k]
+type = "crispasr_server"
+bin = "models/crispasr-v0.8.23/runtime/crispasr-windows-x86_64-cpu/crispasr.exe"
+model = "../voicerefine-desktop/resources/models/cohere-transcribe-03-2026-GGUF/cohere-transcribe-q4_k.gguf"
+backend = "cohere"
+language = "en"
+threads = 8
+gpu_backend = "cpu"
+quantization = "q4_k"
+no_punctuation = true        # Disable Cohere's optional punctuation restorer.
+runtime_version = "0.8.23"
+runtime_git_sha = "7d22deec"
+host = "127.0.0.1"
+port = 51234
+start_timeout_ms = 30000
 request_timeout_ms = 180000
 
 # --- Cloud reference --------------------------------------------------------

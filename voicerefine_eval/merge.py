@@ -35,6 +35,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Merge VoiceRefine evaluation runs")
     parser.add_argument("--inputs", required=True, help="Comma-separated run directories")
     parser.add_argument("--output-dir", required=True, help="Directory for combined artifacts")
+    parser.add_argument(
+        "--backends",
+        default=None,
+        help="Optional comma-separated backend ids to retain from the source runs",
+    )
     return parser.parse_args(argv)
 
 
@@ -79,7 +84,12 @@ def _startup_times(run_dir: Path, manifest: dict[str, Any]) -> dict[str, float |
     return times
 
 
-def merge_runs(input_dirs: list[Path], output_dir: Path) -> dict[str, Any]:
+def merge_runs(
+    input_dirs: list[Path],
+    output_dir: Path,
+    *,
+    backend_ids: set[str] | None = None,
+) -> dict[str, Any]:
     if len(input_dirs) < 2:
         raise ValueError("At least two run directories are required for a comparison")
 
@@ -99,9 +109,11 @@ def merge_runs(input_dirs: list[Path], output_dir: Path) -> dict[str, Any]:
                 f"Dataset mismatch in {run_dir}: expected {expected_dataset}, got {identity}"
             )
 
+        if backend_ids is not None:
+            results = [result for result in results if result.backend_id in backend_ids]
         run_backend_ids = list(dict.fromkeys(result.backend_id for result in results))
         if not run_backend_ids:
-            raise ValueError(f"Run contains no backend rows: {run_dir}")
+            continue
         for backend_id in run_backend_ids:
             rows = [result for result in results if result.backend_id == backend_id]
             ids = {result.eval_id for result in rows}
@@ -126,10 +138,24 @@ def merge_runs(input_dirs: list[Path], output_dir: Path) -> dict[str, Any]:
             results_by_backend[backend_id] = rows
 
         for backend_id, signature in manifest.get("backends", {}).items():
+            if backend_ids is not None and backend_id not in backend_ids:
+                continue
             if backend_id in backend_signatures:
                 raise ValueError(f"Duplicate backend provenance: {backend_id}")
             backend_signatures[backend_id] = signature
-        startup_times.update(_startup_times(run_dir, manifest))
+        run_startup_times = _startup_times(run_dir, manifest)
+        startup_times.update(
+            {
+                backend_id: seconds
+                for backend_id, seconds in run_startup_times.items()
+                if backend_ids is None or backend_id in backend_ids
+            }
+        )
+
+    if backend_ids is not None:
+        missing = backend_ids - set(results_by_backend)
+        if missing:
+            raise ValueError(f"Requested backends were not found: {sorted(missing)}")
 
     all_results = [result for rows in results_by_backend.values() for result in rows]
     summaries = {
@@ -171,6 +197,7 @@ def merge_runs(input_dirs: list[Path], output_dir: Path) -> dict[str, Any]:
             }
             for run_dir, _, _ in loaded
         ],
+        "selected_backends": sorted(backend_ids) if backend_ids is not None else None,
         "backends": backend_signatures,
         "backend_count": len(results_by_backend),
         "row_count": len(all_results),
@@ -184,7 +211,12 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     input_dirs = [_resolve(value.strip()) for value in args.inputs.split(",") if value.strip()]
     output_dir = _resolve(args.output_dir)
-    manifest = merge_runs(input_dirs, output_dir)
+    backend_ids = (
+        {value.strip() for value in args.backends.split(",") if value.strip()}
+        if args.backends
+        else None
+    )
+    manifest = merge_runs(input_dirs, output_dir, backend_ids=backend_ids)
     print(
         f"Merged {manifest['backend_count']} backends and {manifest['row_count']} rows "
         f"into {output_dir}"
