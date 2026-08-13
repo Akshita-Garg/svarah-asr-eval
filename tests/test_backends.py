@@ -212,6 +212,32 @@ def _smallest_config() -> BackendConfig:
     )
 
 
+def test_standard_pulse_config_uses_unified_endpoint(tmp_path, monkeypatch):
+    cfg = load_config().backends["smallest_pulse"]
+
+    assert cfg.type == "smallest"
+    assert cfg.settings["model"] == "pulse"
+    assert cfg.settings["language"] == "en"
+    assert cfg.settings["base_url"] == "https://api.smallest.ai/waves/v1/stt/"
+    assert cfg.settings["min_request_interval_seconds"] == 4.0
+
+    audio = tmp_path / "audio.wav"
+    audio.write_bytes(b"wav-bytes")
+    monkeypatch.setenv("SMALLEST_API_KEY", "secret-key")
+    captured = {}
+
+    def fake_post(url, **kwargs):
+        captured.update(url=url, **kwargs)
+        return _Response(payload={"transcription": "hello world"})
+
+    monkeypatch.setattr("voicerefine_eval.backends.smallest.requests.post", fake_post)
+    backend = SmallestBackend(cfg)
+    backend.start()
+
+    assert backend.transcribe(audio) == "hello world"
+    assert captured["params"] == {"model": "pulse", "language": "en"}
+
+
 def test_smallest_sends_raw_audio_without_leaking_key(tmp_path, monkeypatch):
     audio = tmp_path / "audio.wav"
     audio.write_bytes(b"wav-bytes")

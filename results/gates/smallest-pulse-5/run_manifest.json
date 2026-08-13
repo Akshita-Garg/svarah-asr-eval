@@ -1,0 +1,63 @@
+{
+  "git": {
+    "commit": "adf83ddbc30795c0127b42eeb94aa24699b9b6c0",
+    "dirty": true
+  },
+  "dataset": {
+    "name": "ai4bharat/Svarah",
+    "revision": "ebbf7777fe771490696a3f7b007097606fa8c924",
+    "split": "test",
+    "seed": 42,
+    "subset_size": 5,
+    "debug": false,
+    "subset_manifest_sha256": "f9354148a0aaa05ee9afe003d22668a47fdf6bc40a73875af04b504ff3a66f00"
+  },
+  "python": {
+    "version": "3.12.13",
+    "implementation": "CPython"
+  },
+  "dependencies": {
+    "datasets": "5.0.1",
+    "jiwer": "4.0.0",
+    "numpy": "2.5.2",
+    "sherpa-onnx": "1.13.4",
+    "sherpa-onnx-core": "1.13.4",
+    "soundfile": "0.14.0",
+    "soxr": "1.1.0",
+    "whisper-normalizer": "0.1.15",
+    "requests": "2.34.2"
+  },
+  "platform": {
+    "system": "Windows",
+    "release": "11",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 140 Stepping 1, GenuineIntel",
+    "cpu_count": 8
+  },
+  "backends": {
+    "smallest_pulse": {
+      "backend_id": "smallest_pulse",
+      "type": "smallest",
+      "model": "pulse",
+      "language": "en",
+      "base_url": "https://api.smallest.ai/waves/v1/stt/",
+      "input": "raw_wav_bytes",
+      "min_request_interval_seconds": 4.0
+    }
+  },
+  "backend_summaries": {
+    "smallest_pulse": {
+      "available": true,
+      "startup_seconds": 6.200003554113209e-06,
+      "success_count": 5,
+      "failure_count": 0
+    }
+  },
+  "timing": {
+    "started_at": "2026-08-13T00:59:43.566406+00:00",
+    "completed_at": "2026-08-13T01:00:00.169334+00:00"
+  },
+  "cache": {
+    "enabled": false
+  }
+}

@@ -11,10 +11,11 @@ Indian-English dataset.
 
 See `DESIGN.md` for the methodology and `BUILD_LOG.md` for a step-by-step account
 of how this was built (including the manual steps and pitfalls). The current
-six-system results (the original five plus Smallest.ai) are in
-[`results/comparisons/v0823-six-system-smallest/summary.md`](results/comparisons/v0823-six-system-smallest/summary.md),
+seven-system results (the original five plus Smallest.ai Pulse Pro and Pulse)
+are in
+[`results/comparisons/v0823-seven-system-smallest/summary.md`](results/comparisons/v0823-seven-system-smallest/summary.md),
 with conclusions in
-[`interpretation.md`](results/comparisons/v0823-six-system-smallest/interpretation.md).
+[`interpretation.md`](results/comparisons/v0823-seven-system-smallest/interpretation.md).
 For an intuitive explanation of the complete pipeline, metrics, timing boundary,
 runtime architecture, and learning resources, read
 [`UNDERSTANDING_THE_EVALUATION.md`](UNDERSTANDING_THE_EVALUATION.md).
@@ -31,6 +32,7 @@ For a file-by-file map of the repository and the complete execution path, read
 | `elevenlabs_scribe_v2` | ElevenLabs Scribe v2 | Speech-to-Text API; preserved baseline results |
 | `sarvam_saaras_v4` | Sarvam Saaras v4 | Speech-to-Text API, `en-IN` |
 | `smallest_pulse_pro` | Smallest.ai Pulse Pro | Speech-to-Text API, English |
+| `smallest_pulse` | Smallest.ai Pulse | Speech-to-Text API, English |
 
 The three controlled local backends use the same runtime version, server mode,
 thread count, CPU backend, prepared WAVs, warm-up rule, and timing boundary.
@@ -79,6 +81,9 @@ uv run python -m voicerefine_eval.run --debug --backends crisp_v0823_parakeet_q4
 
 # Run Smallest.ai only in a fresh output directory:
 uv run python -m voicerefine_eval.run --backends smallest_pulse_pro --no-cache --output-dir results/runs/smallest-pulse-pro
+
+# Run standard Smallest.ai Pulse against the same frozen subset:
+uv run python -m voicerefine_eval.run --backends smallest_pulse --no-cache --output-dir results/runs/smallest-pulse
 
 # Force fresh transcription (ignore the cache):
 uv run python -m voicerefine_eval.run --no-cache

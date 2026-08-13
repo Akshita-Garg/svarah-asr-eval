@@ -201,3 +201,15 @@ max_retries = 5
 backoff_base_seconds = 1.0
 backoff_max_seconds = 30.0
 request_timeout_seconds = 300
+
+[backends.smallest_pulse]
+type = "smallest"
+model = "pulse"
+language = "en"
+base_url = "https://api.smallest.ai/waves/v1/stt/"
+# Keep the same pacing and timed request boundary as the Pulse Pro evaluation.
+min_request_interval_seconds = 4.0
+max_retries = 5
+backoff_base_seconds = 1.0
+backoff_max_seconds = 30.0
+request_timeout_seconds = 300

@@ -1,4 +1,4 @@
-"""Smallest.ai Pulse Pro pre-recorded English transcription."""
+"""Smallest.ai Pulse-family pre-recorded English transcription."""
 
 from __future__ import annotations
 
