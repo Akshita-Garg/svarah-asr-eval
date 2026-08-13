@@ -11,11 +11,11 @@ Indian-English dataset.
 
 See `DESIGN.md` for the methodology and `BUILD_LOG.md` for a step-by-step account
 of how this was built (including the manual steps and pitfalls). The current
-seven-system results (the original five plus Smallest.ai Pulse Pro and Pulse)
-are in
-[`results/comparisons/v0823-seven-system-smallest/summary.md`](results/comparisons/v0823-seven-system-smallest/summary.md),
+eight-system results (the original five plus Smallest.ai Pulse Pro, Pulse, and
+the lower-contention Whisper Medium rerun) are in
+[`results/comparisons/v0823-eight-system/summary.md`](results/comparisons/v0823-eight-system/summary.md),
 with conclusions in
-[`interpretation.md`](results/comparisons/v0823-seven-system-smallest/interpretation.md).
+[`interpretation.md`](results/comparisons/v0823-eight-system/interpretation.md).
 For an intuitive explanation of the complete pipeline, metrics, timing boundary,
 runtime architecture, and learning resources, read
 [`UNDERSTANDING_THE_EVALUATION.md`](UNDERSTANDING_THE_EVALUATION.md).
@@ -27,6 +27,7 @@ For a file-by-file map of the repository and the complete execution path, read
 | Backend ID | System | Runtime |
 | --- | --- | --- |
 | `crisp_v0823_whisper_base_en_q4k` | Whisper Base English Q4_K | CrispASR 0.8.23 server, CPU, 8 threads |
+| `crisp_v0823_whisper_medium_en_q4k` | Whisper Medium English Q4_K | CrispASR 0.8.23 server, CPU, 8 threads |
 | `crisp_v0823_parakeet_q4k` | Parakeet TDT 0.6B v3 Q4_K | CrispASR 0.8.23 server, CPU, 8 threads |
 | `crisp_v0823_cohere_q4k` | Cohere Transcribe Q4_K | CrispASR 0.8.23 server, CPU, 8 threads |
 | `elevenlabs_scribe_v2` | ElevenLabs Scribe v2 | Speech-to-Text API; preserved baseline results |
@@ -38,8 +39,9 @@ The three controlled local backends use the same runtime version, server mode,
 thread count, CPU backend, prepared WAVs, warm-up rule, and timing boundary.
 Whisper Base replaces Tiny because Tiny's width cannot be represented by the
 legacy Whisper Q4_K format accepted by CrispASR. See `BUILD_LOG.md`, Phase 17.
-Whisper Medium was also evaluated, but is retained as a supplementary result
-rather than part of this current comparison.
+Whisper Medium's first run was affected by concurrent system load. Its current
+comparison row comes from a fresh lower-contention rerun; the original run is
+retained to show how strongly CPU contention affected latency.
 
 ## Prerequisites
 
