@@ -16,6 +16,9 @@ the lower-contention Whisper Medium rerun) are in
 [`results/comparisons/v0823-eight-system/summary.md`](results/comparisons/v0823-eight-system/summary.md),
 with conclusions in
 [`interpretation.md`](results/comparisons/v0823-eight-system/interpretation.md).
+The current summary and interpretation also document each model's parameter
+count, exact local artifact size where measurable, license/access status,
+architecture, and publicly disclosed training background.
 For an intuitive explanation of the complete pipeline, metrics, timing boundary,
 runtime architecture, and learning resources, read
 [`UNDERSTANDING_THE_EVALUATION.md`](UNDERSTANDING_THE_EVALUATION.md).

@@ -12,6 +12,30 @@ This experiment measures **Indian English accent robustness** on the Svarah data
 - Per-utterance timing wraps only the backend call; startup is measured separately.
 - Cloud timing is API end-to-end latency (upload + network + service + download).
 
+## Model profiles
+
+Model research was checked against official model cards, provider documentation,
+and the Open ASR Leaderboard on **2026-08-13**. "Artifact size" is the exact
+quantized file evaluated locally; it is not peak RAM usage. Hosted API models do
+not expose a downloadable artifact, so their size cannot be measured here.
+
+| System | Access / license | Parameters | Evaluated artifact | Published training background |
+| --- | --- | ---: | ---: | --- |
+| Whisper Base English Q4_K | Public weights; MIT repository | 74M | 46.5 MB | Whisper family: 680,000 hours of internet audio; `.en` is English-only |
+| Whisper Medium English Q4_K | Public weights; MIT repository | 769M | 444.5 MB | Same Whisper family and English-only checkpoint lineage |
+| Parakeet TDT 0.6B v3 Q4_K | Public weights; CC BY 4.0 | 600M | 488.7 MB | Granary-based multilingual pretraining; final stage used about 7,500 hours of human-transcribed audio |
+| Cohere Transcribe Q4_K | Open weights; Apache 2.0 | 2B | 1.510 GB | 500,000 hours of curated audio-transcript pairs plus synthetic data |
+| ElevenLabs Scribe v2 | Proprietary hosted API | Not disclosed | Not available | Corpus, hours, and architecture not publicly disclosed |
+| Smallest.ai Pulse | Proprietary hosted API | Not disclosed | Not available | Corpus, hours, and architecture not publicly disclosed |
+| Smallest.ai Pulse Pro | Proprietary hosted API | Not disclosed | Not available | Corpus, hours, and architecture not publicly disclosed |
+| Sarvam Saaras v4 | Proprietary hosted API | Not disclosed | Not available | V4-specific corpus, hours, and architecture not publicly disclosed |
+
+The word **Open** in Open ASR Leaderboard refers to the public benchmark and
+evaluation framework, not to every listed model. Its interface explicitly
+supports proprietary API models, and its results metadata labels ElevenLabs
+Scribe v2 and Smallest.ai Pulse as proprietary. Full definitions, model
+background, caveats, and source links are in `interpretation.md`.
+
 ## Per-backend results (each backend over its own successes)
 
 RTF is measured only over utterances freshly transcribed this run; cache hits carry no timing and are excluded (the **RTF n** column is that sample size, which can be smaller than the success count on a cached run).
