@@ -18,6 +18,8 @@ with conclusions in
 For an intuitive explanation of the complete pipeline, metrics, timing boundary,
 runtime architecture, and learning resources, read
 [`UNDERSTANDING_THE_EVALUATION.md`](UNDERSTANDING_THE_EVALUATION.md).
+For a file-by-file map of the repository and the complete execution path, read
+[`DIRECTORY_GUIDE.md`](DIRECTORY_GUIDE.md).
 
 ## Systems under test
 
