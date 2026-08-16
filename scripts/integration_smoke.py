@@ -11,6 +11,7 @@ inspection). This is a throwaway harness, not part of the pipeline.
 
 from __future__ import annotations
 
+import os
 import shutil
 import sys
 from pathlib import Path
@@ -24,10 +25,17 @@ from voicerefine_eval.audio import PREPARED_DIR, prepared_path_for
 from voicerefine_eval.dataset import MANIFEST_PATH
 from voicerefine_eval.hashing import write_json_atomic
 
-DESKTOP = Path(
-    r"C:\Users\akshi\Desktop\track-5-voicerefine\voicerefine-desktop"
-    r"\resources\models\sherpa-onnx-whisper-tiny.en\test_wavs"
+# Sample WAVs ship with the desktop app's Whisper Tiny model directory. The
+# default assumes the sibling checkout layout; override for any other location.
+DEFAULT_TEST_WAVS = (
+    Path(__file__).resolve().parents[2]
+    / "voicerefine-desktop"
+    / "resources"
+    / "models"
+    / "sherpa-onnx-whisper-tiny.en"
+    / "test_wavs"
 )
+DESKTOP = Path(os.environ.get("VOICEREFINE_TEST_WAVS_DIR", DEFAULT_TEST_WAVS))
 
 # References ~ ground truth for these LibriSpeech-style clips (used only to make
 # the metrics exercise real numbers in the smoke test).
@@ -44,6 +52,11 @@ STAGE = [
 
 
 def stage() -> None:
+    if not DESKTOP.is_dir():
+        sys.exit(
+            f"Sample WAV directory not found: {DESKTOP}\n"
+            "Set VOICEREFINE_TEST_WAVS_DIR to a directory containing 0.wav and 1.wav."
+        )
     PREPARED_DIR.mkdir(parents=True, exist_ok=True)
     entries = []
     for seq, (eval_id, wav, ref) in enumerate(STAGE):

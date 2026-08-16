@@ -19,6 +19,14 @@ cache/
 data/prepared/
 models/
 
+# Personal working notes — kept locally, not part of the published repository
+DIRECTORY_GUIDE.md
+UNDERSTANDING_THE_EVALUATION.md
+
+# Stray local rename of a diagnostic artifact; the canonical name is
+# per_utterance.csv, which is committed.
+per_utterance_complete.csv
+
 # Editor and operating-system files
 .DS_Store
 Thumbs.db
