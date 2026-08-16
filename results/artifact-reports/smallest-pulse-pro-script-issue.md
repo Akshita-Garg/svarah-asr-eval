@@ -104,6 +104,12 @@ Two further controls point the same way:
 
 Same audio, same request contract, only `model` differs.
 
+> **On the identifiers.** `svarah_test_NNNN` is assigned by this harness, not by
+> Svarah. It maps to a row of the dataset's `test` split at revision
+> `ebbf7777…`; the mapping to Svarah's own `audio_filepath` and row index is
+> committed in [`data/subset_manifest.json`](../../data/subset_manifest.json)
+> and repeated below the table so this report stands alone.
+
 | Utterance | Svarah reference | Pulse Pro (`language=en`) | Pulse (`language=en`) |
 | --- | --- | --- | --- |
 | `svarah_test_0008` | So, starting with Maghi Chakrati, on Maghi Chakrati which | के सो स्टार्टिंग विद मागे सक्राती ऑन मागे सक्राती आह विच | Okay, so starting with Maghesakrati, on Maghesakrati, which |
@@ -122,6 +128,30 @@ Same audio, same request contract, only `model` differs.
 | `svarah_test_0185` | Sunitpur Dhubri | सोनीपुर, धुपरी | Sonitpur Dhopri. |
 | `svarah_test_0190` | Right | राइट | Right? |
 | `svarah_test_0191` | Add Rs 500 | एड रिबीस फाइव हंड्रेड | Add rupees five hundred. |
+
+### Mapping to Svarah's own identifiers
+
+Dataset `ai4bharat/Svarah`, split `test`, revision `ebbf7777…`. `row` is the
+index into that split; `audio_filepath` is Svarah's own filename.
+
+| Harness ID | Row | Svarah `audio_filepath` |
+| --- | ---: | --- |
+| `svarah_test_0008` | 355 | `281474976888873_f2272_chunk_4.wav` |
+| `svarah_test_0018` | 712 | `281474976897459_f2145_chunk_8.wav` |
+| `svarah_test_0029` | 913 | `281474976888145_f1900_chunk_4.wav` |
+| `svarah_test_0034` | 1170 | `281474976893988_f2006_chunk_3.wav` |
+| `svarah_test_0048` | 1728 | `281474976893960_f2523_chunk_0.wav` |
+| `svarah_test_0061` | 2006 | `281474976899703_f2791_chunk_0.wav` |
+| `svarah_test_0068` | 2185 | `281474976898593_f650_chunk_0.wav` |
+| `svarah_test_0070` | 2193 | `281474976902158_f164_chunk_0.wav` |
+| `svarah_test_0074` | 2277 | `281474976897387_f2253_chunk_4.wav` |
+| `svarah_test_0130` | 4532 | `281474976886918_f1857_chunk_0.wav` |
+| `svarah_test_0140` | 4881 | `281474976934169_f3288_chunk_0.wav` |
+| `svarah_test_0141` | 4885 | `281474976898115_f1790_chunk_2.wav` |
+| `svarah_test_0159` | 5369 | `281474976897091_f2875_chunk_0.wav` |
+| `svarah_test_0185` | 6151 | `281474976893839_f3333_chunk_3.wav` |
+| `svarah_test_0190` | 6254 | `281474976895799_f3036_chunk_0.wav` |
+| `svarah_test_0191` | 6294 | `281474976934140_f2456_chunk_0.wav` |
 
 Rows `0048`, `0061`, `0068`, `0070`, `0130`, `0190` are the clearest exhibits:
 the reference contains no Indic proper noun at all, only common English words and
