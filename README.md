@@ -11,10 +11,10 @@ backed by a committed per-utterance CSV and a provenance manifest recording the
 git commit, dataset revision, dependency versions, hardware, and artifact
 hashes.
 
-> **Scope.** Svarah measures **Indian-English accent robustness**. It is not a
-> laptop-dictation dataset, so these numbers do not represent VoiceRefine's full
-> dictation experience. The intended follow-up is a product-level measurement
-> from recording-stop through final text insertion.
+> **Scope.** Svarah is prompted, read speech measuring **Indian-English accent
+> robustness**. It is not a dictation dataset, so these numbers do not represent
+> VoiceRefine's dictation experience. Read [Limitations](#limitations) before
+> carrying any number here further.
 
 ---
 
@@ -75,24 +75,6 @@ Details, controls, and a scoring caveat:
 - **Coverage is reported next to accuracy** so a backend cannot look better by
   failing on hard samples. All eight reached 100%.
 
-### Comparability caveats
-
-Recorded honestly rather than smoothed over:
-
-- **Cloud systems were measured at different times.** Small latency differences
-  between hosted APIs are observations, not permanent speed rankings.
-- **Local latency is contention-sensitive.** Whisper Medium's first run was
-  distorted by concurrent system load: aggregate RTF 3.751 vs **2.219** on a
-  lower-contention rerun — a 40.8% swing — while all 200 transcripts stayed
-  byte-for-byte identical, so corpus WER was unchanged at 0.0728. Both runs are
-  retained in `results/runs/`. The comparison uses the quiet rerun.
-- **Whisper Base replaces Whisper Tiny.** Tiny's width cannot be represented by
-  the legacy Whisper Q4_K format CrispASR accepts; the Q4_K conversion succeeds
-  but fails to load. Documented in BUILD_LOG Phases 15–17.
-- **Quantized local artifacts** are Q4_K conversions, not the providers'
-  original full-precision checkpoints, and should not be read as measurements of
-  those checkpoints.
-
 ### Systems under test
 
 | Backend ID | System | Runtime |
@@ -133,6 +115,71 @@ v2 and Smallest.ai Pulse as proprietary. Sources and full reasoning are in
 
 ---
 
+## Limitations
+
+What this benchmark does **not** establish. These are stated up front because
+each one bounds how far the numbers above can be carried.
+
+**On the task being measured**
+
+- **Svarah is prompted, read speech — not dictation.** Speakers were recorded
+  reading and responding to prompts. Real dictation has false starts, filler,
+  self-correction, and variable mic distance. A system that ranks well here has
+  demonstrated accent robustness, not dictation quality.
+- **Batch transcription only.** Every system received a complete WAV and
+  returned a final transcript. No streaming or partial-hypothesis path was
+  tested, which is the mode a live dictation product actually uses. This
+  particularly understates systems designed for streaming — Smallest.ai
+  documents Pulse as a streaming model, and it was measured in batch mode.
+- **No end-to-end product measurement.** The timed window covers the backend
+  call only. Audio capture, conversion, cleanup, optional transformation, and
+  text insertion are all excluded.
+- **200 utterances, one dataset, one accent family.** Small enough that a
+  handful of hard recordings move corpus WER meaningfully, and narrow enough
+  that nothing here generalises to other languages or to non-Indian English.
+
+**On the local models**
+
+- **Q4_K artifacts, not original checkpoints.** All four local systems were
+  evaluated as 4-bit quantized conversions. Results should not be read as
+  measurements of the providers' released models.
+- **No full-precision control.** No FP16/FP32 run was performed alongside the
+  quantized ones, so the accuracy cost of quantization is **not isolated** by
+  this experiment. Where a local model trails a hosted API, this data cannot
+  say how much of the gap is quantization versus the model itself.
+- **One machine, one CPU, no GPU.** All local figures come from a single
+  8-thread Intel CPU. RTF is hardware-specific and will not transfer.
+- **Whisper Base substitutes for Whisper Tiny.** Tiny's width cannot be
+  represented by the legacy Whisper Q4_K format CrispASR accepts — the
+  conversion succeeds but the load fails (BUILD_LOG Phases 15–17).
+
+**On timing**
+
+- **Cloud systems were measured at different times**, against live production
+  endpoints under unknown load. Small latency differences between hosted APIs
+  are observations, not durable speed rankings.
+- **Local latency is contention-sensitive.** Whisper Medium's first run was
+  distorted by concurrent system load: aggregate RTF 3.751 versus **2.219** on a
+  lower-contention rerun — a 40.8% swing — while all 200 transcripts stayed
+  byte-for-byte identical, leaving corpus WER unchanged at 0.0728. Both runs are
+  retained in `results/runs/`; the comparison uses the quiet rerun. Any RTF here
+  should be read with that margin in mind.
+- **Network latency is inside the cloud numbers.** Cloud RTF includes upload and
+  download from a single location, so it measures the service as consumed from
+  here, not the model's inference speed.
+
+**On scoring**
+
+- **One normalizer defines "correct".** Whisper's `EnglishTextNormalizer` is
+  applied identically to every system, but it encodes choices — it strips
+  Devanagari combining marks, which inflates hypothesis token counts on
+  non-Latin output. The affected rows are quantified in the finding report.
+- **Reference transcripts are not infallible.** Svarah's references are human
+  transcriptions and contain occasional inconsistencies that count against every
+  system equally.
+
+---
+
 ## Repository layout
 
 ```
@@ -159,6 +206,17 @@ the SHA-256 of every source run they were assembled from.
 ---
 
 ## Reproducing
+
+```bash
+uv sync                                    # 1. install (Python 3.12, from lockfile)
+cp .env.example .env                       # 2. add your own HF_TOKEN + API keys
+uv run python -m voicerefine_eval.run      # 3. run the 200-utterance evaluation
+```
+
+No credentials are bundled. Backends whose key or model artifact is missing skip
+cleanly, so the harness runs with whatever subset you have access to — the four
+CrispASR backends additionally need local model artifacts, which are not
+redistributed here.
 
 ### Prerequisites
 
@@ -280,11 +338,18 @@ zero mismatches (8 backends × 200 utterances = 1,600 scored rows).
 
 ---
 
-## Attribution
+## License and attribution
 
-This repository redistributes reference transcripts from the **Svarah** dataset
-in its `per_utterance.csv` artifacts. Svarah is released by AI4Bharat under
-**CC BY 4.0**; the audio itself is not redistributed here.
+The evaluation harness, scripts, tests, and documentation in this repository are
+released under the [MIT License](LICENSE).
+
+The benchmark is built on **[Svarah](https://huggingface.co/datasets/ai4bharat/Svarah)**,
+created and released by **[AI4Bharat](https://ai4bharat.iitm.ac.in/)** under
+**[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)**. This repository
+redistributes Svarah reference transcripts inside its `per_utterance.csv`
+artifacts; the audio itself is **not** redistributed. Paper:
+[*Svarah: Evaluating English ASR Systems on Indian Accents*](https://arxiv.org/abs/2305.15760)
+(Javed et al., INTERSPEECH 2023).
 
 ```bibtex
 @inproceedings{DBLP:conf/interspeech/JavedJNSNRBKK23,
