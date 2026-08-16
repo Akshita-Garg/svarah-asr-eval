@@ -101,8 +101,8 @@ the `AUDIO_PATH` constant in `scripts/compare_smallest_models.py`, then run:
 uv run python scripts/compare_smallest_models.py
 ```
 
-This diagnostic prints the dataset reference, audio SHA-256, both raw API
-transcripts, request latency, and whether each response contains Devanagari.
+The script makes two plainly visible API calls with the same audio: one using
+`model=pulse` and one using `model=pulse-pro`, then prints both raw transcripts.
 
 Use `--output-dir results/runs/<name>` for an isolated run. The first run
 downloads the dataset and prepares 16 kHz mono WAVs under
