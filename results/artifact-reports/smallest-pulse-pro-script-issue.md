@@ -64,6 +64,42 @@ Reproduce with:
 uv run python scripts/compare_smallest_models.py    # edit AUDIO_FILE to pick the recording
 ```
 
+## Evidence: this harness did not alter the audio
+
+A natural objection is that the evaluation's own audio preparation degraded the
+signal and pushed a language-identification path toward Indic. It did not: **no
+resampling took place at all.**
+
+Svarah's test split is distributed as 16 kHz mono audio, which is already the
+harness's target format, so the resampling branch never executes. Verified
+across the whole frozen subset by decoding the dataset's native audio and
+comparing it against the prepared WAV actually sent to every backend:
+
+| Check | Result |
+| --- | --- |
+| Native sample rate, all 200 utterances | 16000 Hz, mono |
+| Utterances that required resampling | **0 of 200** |
+| Max per-sample difference, source vs prepared | **1.53e-05** |
+
+That residual is half of one 16-bit quantization step (1/32767 ≈ 3.05e-05) — the
+float-to-PCM_16 rounding done when writing the WAV, not a filtering artifact.
+The figure is the same for the 16 affected rows as for the 184 unaffected ones,
+so nothing about the affected audio is distinguishable.
+
+Reproduce with:
+
+```bash
+uv run python scripts/verify_audio_preparation.py
+```
+
+Two further controls point the same way:
+
+- **Same bytes, different model.** Standard `pulse` receives the byte-identical
+  prepared WAV and returns clean Latin English. Any explanation resting on audio
+  degradation would have to degrade Pulse Pro while leaving Pulse untouched.
+- **Same bytes, four other systems.** Whisper Base, Whisper Medium, Parakeet and
+  Cohere consume the same prepared files and all return Latin-script English.
+
 ## Evidence: 16 affected utterances
 
 Same audio, same request contract, only `model` differs.

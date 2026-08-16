@@ -11,10 +11,10 @@ backed by a committed per-utterance CSV and a provenance manifest recording the
 git commit, dataset revision, dependency versions, hardware, and artifact
 hashes.
 
-> **Scope.** Svarah is prompted, read speech measuring **Indian-English accent
-> robustness**. It is not a dictation dataset, so these numbers do not represent
-> VoiceRefine's dictation experience. Read [Limitations](#limitations) before
-> carrying any number here further.
+> **Scope.** Svarah measures **Indian-English accent robustness** across read,
+> spontaneous, and task-oriented speech. It is not a dictation corpus, so these
+> numbers do not represent VoiceRefine's dictation experience. Read
+> [Limitations](#limitations) before carrying any number here further.
 
 ---
 
@@ -108,9 +108,7 @@ not peak RAM. Where a field is undisclosed, no estimate was substituted.
 | Smallest.ai Pulse Pro | Proprietary hosted API | Not disclosed | Not available | Not publicly disclosed |
 | Sarvam Saaras v4 | Proprietary hosted API | Not disclosed | Not available | No v4-specific disclosure found |
 
-"Open" in *Open ASR Leaderboard* refers to the public benchmark and evaluation
-framework, not to every listed model — its own metadata labels ElevenLabs Scribe
-v2 and Smallest.ai Pulse as proprietary. Sources and full reasoning are in
+Sources for each row are in
 [`interpretation.md`](results/comparisons/v0823-eight-system/interpretation.md).
 
 ---
@@ -122,10 +120,16 @@ each one bounds how far the numbers above can be carried.
 
 **On the task being measured**
 
-- **Svarah is prompted, read speech — not dictation.** Speakers were recorded
-  reading and responding to prompts. Real dictation has false starts, filler,
-  self-correction, and variable mic distance. A system that ranks well here has
-  demonstrated accent robustness, not dictation quality.
+- **Svarah is a mixed-register accent benchmark, not a dictation corpus.** It
+  combines read speech with spontaneous conversational speech, spanning domains
+  such as history, culture, tourism, government and sports, alongside real-world
+  task utterances (ordering groceries, digital payments, checking a pension
+  claim or passport status). The 200-utterance subset reflects that mix: it
+  ranges from multi-clause extempore passages to bare voice-assistant commands
+  like `Up`, `Backward`, and `volume level`. That spread is a strength for
+  accent coverage, but it is not the same distribution as sustained
+  laptop dictation, and short command utterances make per-utterance WER
+  volatile — a single wrong word on a one-word reference scores 1.0.
 - **Batch transcription only.** Every system received a complete WAV and
   returned a final transcript. No streaming or partial-hypothesis path was
   tested, which is the mode a live dictation product actually uses. This
@@ -187,7 +191,7 @@ voicerefine_eval/      evaluation harness (dataset, audio, backends, metrics, re
   backends/            one module per ASR system, behind a common ASRBackend contract
 config/eval.toml       experiment definition: backends, runtime flags, scoring rules
 data/subset_manifest.json   the frozen 200-utterance subset (committed)
-scripts/               dataset probe, integration smoke test, Smallest.ai comparison
+scripts/               dataset probe, integration smoke test, audio-preparation check
 tests/                 40 unit tests over normalization, metrics, cache, backends, merge
 results/
   runs/                individual per-backend runs (immutable)
@@ -221,8 +225,9 @@ redistributed here.
 ### Prerequisites
 
 1. **Python 3.12** and [uv](https://docs.astral.sh/uv/). Python 3.13/3.14 do
-   **not** work — the ASR runtime (`sherpa-onnx-core`) has no wheels for them
-   yet (see Troubleshooting).
+   **not** work: `sherpa-onnx` installs but its native `sherpa-onnx-core` has no
+   wheel there, so it fails at runtime with a misleading
+   `version [27] is not supported` error. BUILD_LOG Phase 3.5 has the diagnosis.
 2. **Local runtime and model artifacts** for the four CrispASR backends. These
    are gitignored; paths are overridable via the `VOICEREFINE_*` variables.
 3. **HuggingFace access** to the gated Svarah dataset (token + accepted terms).
@@ -312,29 +317,6 @@ for s in m['source_runs']:
 
 On the committed artifacts this verifies 16 hashes across 8 source runs with
 zero mismatches (8 backends × 200 utterances = 1,600 scored rows).
-
----
-
-## Troubleshooting
-
-- **`The given version [27] is not supported, only version 1 to 10 is supported`**
-  — You're on Python 3.13/3.14. `sherpa-onnx` installs but its native
-  `sherpa-onnx-core` has no wheel there, so it fails at runtime. The model is
-  not the problem. Use Python 3.12
-  (`uv python pin 3.12 && rm -rf .venv uv.lock && uv sync`) and ensure
-  `sherpa-onnx-core` is installed explicitly — it is not pulled in as a
-  dependency of `sherpa-onnx`.
-- **`DatasetNotFoundError: ... gated dataset`** — accept the dataset terms on
-  the Hub and set `HF_TOKEN` in `.env`.
-- **ElevenLabs backend skipped** — `ELEVENLABS_API_KEY` is not set, or verify
-  the `model_id`/endpoint in `config/eval.toml` against current docs.
-- **Smallest.ai backend skipped** — set `SMALLEST_API_KEY` or the accepted
-  `SMALLESTAI_API_KEY` alias in `.env`.
-- **HTTP 429 from Smallest.ai on a full run** — the harness paces request starts
-  (`min_request_interval_seconds`). The wait happens *before* the timed call, so
-  it changes batch wall-clock but does not make individual requests look faster.
-- **Windows symlink warning from `huggingface_hub`** — harmless; set
-  `HF_HUB_DISABLE_SYMLINKS_WARNING=1` or enable Developer Mode.
 
 ---
 
