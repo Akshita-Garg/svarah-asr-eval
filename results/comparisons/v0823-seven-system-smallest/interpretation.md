@@ -57,18 +57,17 @@ types, while standard Pulse returned correct Latin-script English through both
 the unified and legacy Pulse endpoints. The strongest current explanation is a
 Pulse Pro model or API-routing behavior, not evaluation normalization.
 
-## Product and outreach interpretation
+## Product interpretation
 
 Standard Pulse is a credible positive result on this Indian-English accent
 benchmark: it matched ElevenLabs' aggregate WER, was close to Cohere, had full
 coverage, stayed comfortably faster than real time, and remained script
 consistent. Sarvam was still substantially more accurate.
 
-For outreach, lead with the standard Pulse result and the reproducible method.
-Then describe the Pulse Pro behavior as a constructive observation: the same
-audio and English request produced script switching only when the selected model
-was Pulse Pro. Do not imply that Pulse Pro always fails or that this benchmark
-measures every product scenario.
+The Pulse Pro script behavior is scoped to what was measured: the same audio and
+the same English request produced script switching only when the selected model
+was Pulse Pro. It does not follow that Pulse Pro always fails, and this benchmark
+does not measure every product scenario.
 
 This is an accent-robustness benchmark, not a complete VoiceRefine product test.
 Cloud latency includes upload, network, provider processing, and response time,

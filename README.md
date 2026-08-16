@@ -47,46 +47,14 @@ run slower than real time on this CPU and are poor defaults for an interaction
 that should feel immediate. Whisper Base is faster still but has the weakest
 local accuracy.
 
----
-
-## Key finding: Pulse Pro returns Devanagari for English-only audio
-
-Smallest.ai documents Pulse Pro as English-only — its `language` query parameter
-accepts the single enum value `en`. On Indian-accented English audio it
-nevertheless returns **Devanagari transliterations of ordinary English words** on
-16 of 200 utterances (8.0%): `volume level` → `वॉल्यूम लेवल`, `Right` → `राइट`,
-`London, Singapore, New York, Bangkok, Dubai` → `लंदन, सिंगापुर, न्यूयॉर्क, बैंकॉक, दुबई`.
-
-The same audio bytes sent to standard `pulse` return clean Latin English. Three
-controls rule out a client-side mistake — most decisively, requesting
-`language=hi` returns **HTTP 400** (`"Invalid enum value. Expected 'en',
-received 'hi'"`), proving the parameter is validated rather than ignored. There
-is no request a client could send that would select a non-English mode.
-
-The measured impact:
-
-| System | WER, all 200 | WER, excluding the 16 affected rows |
-| --- | ---: | ---: |
-| Smallest.ai Pulse Pro | **0.1013** | **0.0627** |
-| Smallest.ai Pulse | 0.0752 | 0.0681 |
-
-Those 16 rows carry **2.4% of the reference words but 39.5% of Pulse Pro's total
-error mass**. Excluding them, Pulse Pro (0.0627) is *more* accurate than standard
-Pulse (0.0681) — the expected ordering. **The output-script behavior alone
-inverts the ranking of Smallest.ai's two models.**
-
-The behavior is deterministic: three complete runs plus a separate live
-reproduction flagged exactly the same rows. It is also distinct from ordinary
-code-switching — ElevenLabs Scribe v2 emitted Devanagari on 7 rows, but only for
-genuinely Indic proper nouns, leaving surrounding English in Latin. Pulse Pro
-transliterates English function words (`ऑफ़` = "of", `ऑल` = "all", `इन` = "in").
-
-📄 **Full write-up with reproduction steps, all 16 rows, and a scoring caveat:**
-[`results/artifact-reports/smallest-pulse-pro-script-issue.md`](results/artifact-reports/smallest-pulse-pro-script-issue.md)
-
-```bash
-uv run python scripts/compare_smallest_models.py   # live reproduction, 4 API calls
-```
+**One result needs a footnote.** On 16 of the 200 utterances, Pulse Pro returned
+Devanagari transliterations of English words while standard Pulse returned Latin
+English for the same audio. Those rows carry 2.4% of the reference words but
+39.5% of Pulse Pro's error mass; excluding them it scores 0.0627, ahead of
+standard Pulse's 0.0681. The headline table above leaves them in, because
+excluding rows for one provider only would not be a like-for-like comparison.
+Details, controls, and a scoring caveat:
+[`smallest-pulse-pro-script-issue.md`](results/artifact-reports/smallest-pulse-pro-script-issue.md).
 
 ---
 
@@ -178,7 +146,7 @@ results/
   runs/                individual per-backend runs (immutable)
   gates/               5-recording integration gates run before each full evaluation
   comparisons/         merged multi-system reports
-  artifact-reports/    the Pulse Pro output-script finding
+  artifact-reports/    write-ups of individual findings
   archive/             superseded baseline, retained for provenance
 DESIGN.md              methodology spec — the source of truth the build follows
 BUILD_LOG.md           phase-by-phase build record, including dead ends and fixes
