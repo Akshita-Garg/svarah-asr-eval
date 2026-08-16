@@ -12,7 +12,7 @@
 [dataset]
 name = "ai4bharat/Svarah"
 split = "test"
-# Pinned at probe time (2025-03-10). The manifest records this so later runs
+# Pinned at probe time (2026-08-10). The manifest records this so later runs
 # recover the exact subset from this revision.
 revision = "ebbf7777fe771490696a3f7b007097606fa8c924"
 seed = 42
