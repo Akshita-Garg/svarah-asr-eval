@@ -206,6 +206,14 @@ Pulse Pro produced 16 Devanagari rows despite `language=en`; standard Pulse
 produced none. The separate controlled reproduction and the seven-system
 interpretation retain the full diagnostic details.
 
+Those 16 rows carry 2.4% of the reference words but 39.5% of Pulse Pro's total
+error mass. Excluding them, Pulse Pro scores 0.0627 — ahead of standard Pulse
+(0.0681) — so the output-script behavior alone inverts the ranking of
+Smallest.ai's two models. A live reproduction, the full 16-row exhibit, the
+distinction from ElevenLabs' ordinary code-switching, and a caveat on the
+per-row WER figures are in
+[`results/artifact-reports/smallest-pulse-pro-script-issue.md`](../../artifact-reports/smallest-pulse-pro-script-issue.md).
+
 This benchmark measures Indian-English accent robustness and backend-call
 throughput, not complete VoiceRefine behavior. The next product evaluation
 should measure recording stop through final text insertion on realistic
