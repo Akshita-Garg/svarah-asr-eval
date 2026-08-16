@@ -94,6 +94,16 @@ uv run python -m voicerefine_eval.run --backends smallest_pulse --no-cache --out
 uv run python -m voicerefine_eval.run --no-cache
 ```
 
+To compare Smallest.ai Pulse and Pulse Pro on one exact Svarah recording, edit
+the `AUDIO_PATH` constant in `scripts/compare_smallest_models.py`, then run:
+
+```bash
+uv run python scripts/compare_smallest_models.py
+```
+
+This diagnostic prints the dataset reference, audio SHA-256, both raw API
+transcripts, request latency, and whether each response contains Devanagari.
+
 Use `--output-dir results/runs/<name>` for an isolated run. The first run
 downloads the dataset and prepares 16 kHz mono WAVs under
 `data/prepared/` (gitignored). Later runs reuse the prepared audio and the
