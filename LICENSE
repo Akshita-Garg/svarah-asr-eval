@@ -19,23 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-Third-party content
--------------------
-
-The MIT terms above cover the evaluation harness, scripts, tests, and
-documentation authored in this repository. They do not extend to third-party
-material included or referenced here:
-
-- Reference transcripts in the `results/**/per_utterance.csv` artifacts are
-  derived from the Svarah dataset (AI4Bharat), released under Creative Commons
-  Attribution 4.0 International (CC BY 4.0). Reuse of that material remains
-  subject to CC BY 4.0 and requires attribution to AI4Bharat.
-  https://creativecommons.org/licenses/by/4.0/
-
-- Model artifacts are not distributed in this repository and remain under their
-  own licenses: OpenAI Whisper (MIT), NVIDIA Parakeet TDT 0.6B v3 (CC BY 4.0),
-  Cohere Transcribe (Apache 2.0). Hosted APIs (ElevenLabs, Sarvam, Smallest.ai)
-  were accessed under their providers' terms of service.

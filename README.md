@@ -323,7 +323,8 @@ zero mismatches (8 backends × 200 utterances = 1,600 scored rows).
 ## License and attribution
 
 The evaluation harness, scripts, tests, and documentation in this repository are
-released under the [MIT License](LICENSE).
+released under the [MIT License](LICENSE). Third-party terms covering the
+dataset and the evaluated models are set out in [NOTICE](NOTICE).
 
 The benchmark is built on **[Svarah](https://huggingface.co/datasets/ai4bharat/Svarah)**,
 created and released by **[AI4Bharat](https://ai4bharat.iitm.ac.in/)** under

@@ -1,0 +1,43 @@
+Third-party content
+===================
+
+The MIT License in LICENSE covers the evaluation harness, scripts, tests, and
+documentation authored in this repository. It does not extend to third-party
+material included or referenced here.
+
+Svarah dataset
+--------------
+
+Reference transcripts embedded in the `results/**/per_utterance.csv` artifacts
+are derived from the Svarah dataset, created and released by AI4Bharat under the
+Creative Commons Attribution 4.0 International license (CC BY 4.0). Reuse of
+that material remains subject to CC BY 4.0 and requires attribution to
+AI4Bharat. The dataset audio itself is not redistributed in this repository.
+
+  Dataset: https://huggingface.co/datasets/ai4bharat/Svarah
+  License: https://creativecommons.org/licenses/by/4.0/
+
+  Tahir Javed, Sakshi Joshi, Vignesh Nagarajan, Sai Sundaresan, Janki Nawale,
+  Abhigyan Raman, Kaushal Santosh Bhogale, Pratyush Kumar, Mitesh M. Khapra.
+  "Svarah: Evaluating English ASR Systems on Indian Accents."
+  INTERSPEECH 2023, pages 5087-5091. https://arxiv.org/abs/2305.15760
+
+Model artifacts
+---------------
+
+No model weights are distributed in this repository. The models evaluated remain
+under their own licenses:
+
+  OpenAI Whisper (Base.en, Medium.en)  MIT
+  NVIDIA Parakeet TDT 0.6B v3          CC BY 4.0
+  Cohere Transcribe                    Apache 2.0
+
+Locally evaluated files are 4-bit quantized conversions, not the providers'
+original released checkpoints.
+
+Hosted services
+---------------
+
+ElevenLabs Scribe v2, Sarvam Saaras v4, and Smallest.ai Pulse and Pulse Pro were
+accessed through their public APIs under their providers' terms of service. No
+credentials are included in this repository.
