@@ -1219,3 +1219,45 @@ it is retained only as predecessor context and is not attributed to the
 evaluated v4 model. Research was checked on 2026-08-13, and source links are
 kept next to the detailed claims in the final interpretation.
 
+
+---
+
+## Phase 27 - Publication pass  `[SCRIPTED]`
+
+### Known debt: sherpa-onnx is now vestigial
+
+`sherpa-onnx` and `sherpa-onnx-core` remain hard dependencies in
+`pyproject.toml`, and `sherpa-onnx-core` has no wheels past Python 3.12. That is
+the sole reason the project pins `requires-python = ">=3.12,<3.13"`.
+
+Nothing in the published results uses them. The only sherpa-backed backend is
+`voicerefine_whisper_tiny_int8`, which is not in the active set — Phase 17
+replaced it with Whisper Base running under CrispASR. The four local backends in
+the comparison are `crispasr_server` type: they drive a standalone binary over
+HTTP and never import sherpa. The Python pin is therefore inherited from a
+retained dependency, not a requirement of any system being measured.
+
+**Why it was not removed.** Dropping the dependency would regenerate `uv.lock`,
+after which the environment would no longer match the one recorded in every
+committed `run_manifest.json`. Those manifests pin exact dependency versions and
+are a large part of what makes the results checkable. Keeping the locked
+environment that actually produced the numbers was judged more valuable than
+lifting an interpreter ceiling that uv satisfies automatically.
+
+The right moment to remove it is the next full re-run, when the manifests are
+being regenerated anyway.
+
+### Audio preparation ruled out as a cause of the Pulse Pro script output
+
+A fair objection to the Pulse Pro finding is that this harness's own audio
+conversion degraded the signal. `scripts/verify_audio_preparation.py` decodes
+each utterance's native dataset audio and compares it with the prepared WAV that
+was actually sent to the backends.
+
+Svarah's test split is already 16 kHz mono, so the resampling branch never
+executes: **0 of 200 utterances were resampled**. The largest per-sample
+difference is 1.53e-05, half of one 16-bit quantization step (1/32767), i.e. the
+float-to-PCM_16 rounding done when writing the file. That value is identical for
+the 16 affected rows and the 184 unaffected ones, so nothing distinguishes the
+affected audio. Standard Pulse returns clean Latin English from the
+byte-identical file.
