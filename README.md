@@ -224,10 +224,15 @@ redistributed here.
 
 ### Prerequisites
 
-1. **Python 3.12** and [uv](https://docs.astral.sh/uv/). Python 3.13/3.14 do
-   **not** work: `sherpa-onnx` installs but its native `sherpa-onnx-core` has no
-   wheel there, so it fails at runtime with a misleading
-   `version [27] is not supported` error. BUILD_LOG Phase 3.5 has the diagnosis.
+1. **[uv](https://docs.astral.sh/uv/)**, which handles the interpreter for you.
+   `.python-version` and `requires-python = ">=3.12,<3.13"` pin the project to
+   **Python 3.12**, so `uv sync` selects it — fetching it if it is not already
+   installed — rather than using a newer one. The pin exists because
+   `sherpa-onnx-core` has no wheels past 3.12. That is a dependency retained
+   from the superseded sherpa-based Whisper Tiny backend and is not used by any
+   system in the results: the four local backends run on the standalone CrispASR
+   binary and are driven over HTTP, so they are indifferent to the Python
+   version. BUILD_LOG Phase 3.5 records how the pin was diagnosed.
 2. **Local runtime and model artifacts** for the four CrispASR backends. These
    are gitignored; paths are overridable via the `VOICEREFINE_*` variables.
 3. **HuggingFace access** to the gated Svarah dataset (token + accepted terms).
