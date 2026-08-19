@@ -7,6 +7,7 @@ from voicerefine_eval.backends import build_backend
 from voicerefine_eval.backends.base import TranscriptionError
 from voicerefine_eval.backends.parakeet_crispasr import CrispAsrServerBackend
 from voicerefine_eval.backends.sarvam import SarvamBackend
+from voicerefine_eval.backends.deepgram import DeepgramBackend
 from voicerefine_eval.backends.smallest import SmallestBackend
 from voicerefine_eval.config import BackendConfig, load_config
 
@@ -323,3 +324,120 @@ def test_smallest_pacing_uses_untimed_prepare_hook(monkeypatch):
 
     assert sleeps == [2.5]
     assert backend.cache_signature()["min_request_interval_seconds"] == 3.5
+
+
+def _deepgram_config(**overrides) -> BackendConfig:
+    settings = {
+        "model": "nova-3",
+        "language": "en",
+        "base_url": "https://api.deepgram.com/v1/listen",
+        "punctuate": True,
+        "smart_format": False,
+        "max_retries": 2,
+        "backoff_base_seconds": 0,
+    }
+    settings.update(overrides)
+    return BackendConfig("deepgram_nova3", "deepgram", settings)
+
+
+def _deepgram_payload(transcript: str) -> dict:
+    return {"results": {"channels": [{"alternatives": [{"transcript": transcript}]}]}}
+
+
+def test_deepgram_sends_expected_request_without_leaking_key(tmp_path, monkeypatch):
+    audio = tmp_path / "audio.wav"
+    audio.write_bytes(b"wav")
+    monkeypatch.setenv("DEEPGRAM_API_KEY", "secret-key")
+    captured = {}
+
+    def fake_post(url, **kwargs):
+        captured.update(url=url, **kwargs)
+        return _Response(payload=_deepgram_payload("  hello world  "))
+
+    monkeypatch.setattr("voicerefine_eval.backends.deepgram.requests.post", fake_post)
+    backend = DeepgramBackend(_deepgram_config())
+    backend.start()
+
+    assert backend.transcribe(audio) == "hello world"
+    assert captured["url"] == "https://api.deepgram.com/v1/listen"
+    assert captured["headers"]["Authorization"] == "Token secret-key"
+    assert captured["headers"]["Content-Type"] == "audio/wav"
+    assert captured["params"]["model"] == "nova-3"
+    assert captured["params"]["language"] == "en"
+    # Query params must be explicit strings, not Python bools.
+    assert captured["params"]["punctuate"] == "true"
+    assert captured["params"]["smart_format"] == "false"
+    assert captured["data"] == b"wav"
+    assert "secret-key" not in str(backend.cache_signature())
+
+
+def test_deepgram_smart_format_stays_off_by_default():
+    # The Whisper normalizer must remain the only formatting pass applied.
+    assert DeepgramBackend(_deepgram_config()).smart_format is False
+    assert DeepgramBackend(_deepgram_config(smart_format=True)).smart_format is True
+
+
+def test_deepgram_rejects_unexpected_response_shape(tmp_path, monkeypatch):
+    audio = tmp_path / "audio.wav"
+    audio.write_bytes(b"wav")
+    monkeypatch.setenv("DEEPGRAM_API_KEY", "secret-key")
+
+    monkeypatch.setattr(
+        "voicerefine_eval.backends.deepgram.requests.post",
+        lambda *a, **k: _Response(payload={"results": {"channels": []}}),
+    )
+    backend = DeepgramBackend(_deepgram_config())
+    backend.start()
+
+    with pytest.raises(TranscriptionError) as excinfo:
+        backend.transcribe(audio)
+    assert excinfo.value.category == "bad_response"
+
+
+def test_deepgram_retries_transient_server_error(tmp_path, monkeypatch):
+    audio = tmp_path / "audio.wav"
+    audio.write_bytes(b"wav")
+    monkeypatch.setenv("DEEPGRAM_API_KEY", "secret-key")
+    responses = iter([
+        _Response(status_code=503, text="unavailable"),
+        _Response(payload=_deepgram_payload("recovered")),
+    ])
+
+    monkeypatch.setattr(
+        "voicerefine_eval.backends.deepgram.requests.post",
+        lambda *a, **k: next(responses),
+    )
+    backend = DeepgramBackend(_deepgram_config())
+    backend.start()
+
+    assert backend.transcribe(audio) == "recovered"
+    assert backend.last_attempts == 2
+
+
+def test_deepgram_does_not_retry_terminal_auth_failure(tmp_path, monkeypatch):
+    audio = tmp_path / "audio.wav"
+    audio.write_bytes(b"wav")
+    monkeypatch.setenv("DEEPGRAM_API_KEY", "secret-key")
+    calls = {"n": 0}
+
+    def fake_post(*a, **k):
+        calls["n"] += 1
+        return _Response(status_code=401, text="unauthorized")
+
+    monkeypatch.setattr("voicerefine_eval.backends.deepgram.requests.post", fake_post)
+    backend = DeepgramBackend(_deepgram_config())
+    backend.start()
+
+    with pytest.raises(TranscriptionError) as excinfo:
+        backend.transcribe(audio)
+    assert excinfo.value.category == "http_401"
+    assert calls["n"] == 1
+
+
+def test_deepgram_unavailable_without_key(monkeypatch):
+    monkeypatch.delenv("DEEPGRAM_API_KEY", raising=False)
+    assert DeepgramBackend(_deepgram_config()).is_available() is False
+
+
+def test_build_backend_constructs_deepgram():
+    assert isinstance(build_backend(_deepgram_config()), DeepgramBackend)

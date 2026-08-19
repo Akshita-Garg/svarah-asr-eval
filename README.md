@@ -1,7 +1,7 @@
 # VoiceRefine Svarah ASR Evaluation
 
-A controlled, reproducible benchmark of eight speech-to-text systems — four
-local CPU models and four hosted APIs — on a frozen 200-utterance subset of
+A controlled, reproducible benchmark of nine speech-to-text systems — four
+local CPU models and five hosted APIs — on a frozen 200-utterance subset of
 [Svarah](https://huggingface.co/datasets/ai4bharat/Svarah), the AI4Bharat
 Indian-English accent dataset.
 
@@ -20,7 +20,7 @@ hashes.
 
 ## Headline results
 
-All eight systems transcribed the same 200 recordings with **zero failures**.
+All nine systems transcribed the same 200 recordings with **zero failures**.
 Corpus WER (aggregate edits ÷ aggregate reference words) is the primary accuracy
 metric; lower is better. Aggregate RTF is total measured transcription time ÷
 total audio duration; below 1.0 is faster than real time.
@@ -32,12 +32,13 @@ total audio duration; below 1.0 is faster than real time.
 | Whisper Medium English Q4_K | Local CPU | 0.0728 | 2.219 | 5.14 s |
 | Smallest.ai Pulse | Cloud API | 0.0752 | **0.114** | 0.00 s |
 | ElevenLabs Scribe v2 | Cloud API | 0.0752 | 0.254 | 0.00 s |
+| Deepgram Nova-3 | Cloud API | 0.0762 | 0.441 | 0.00 s |
 | Parakeet TDT 0.6B v3 Q4_K | Local CPU | 0.0829 | 0.439 | 8.84 s |
 | Smallest.ai Pulse Pro | Cloud API | 0.1013 | 0.118 | 0.00 s |
 | Whisper Base English Q4_K | Local CPU | 0.1143 | 0.298 | 0.53 s |
 
-Full metrics: [`results/comparisons/v0823-eight-system/summary.md`](results/comparisons/v0823-eight-system/summary.md).
-Analysis: [`interpretation.md`](results/comparisons/v0823-eight-system/interpretation.md).
+Full metrics: [`results/comparisons/v0823-nine-system/summary.md`](results/comparisons/v0823-nine-system/summary.md).
+Analysis: [`interpretation.md`](results/comparisons/v0823-nine-system/interpretation.md).
 
 **What the numbers say.** Sarvam Saaras v4 is the most accurate system tested,
 by a wide margin. Among local models, Parakeet is the strongest practical
@@ -73,7 +74,7 @@ Details, controls, and a scoring caveat:
   measured separately and reported in its own column. Cloud timing is API
   end-to-end latency (upload + network + service + download).
 - **Coverage is reported next to accuracy** so a backend cannot look better by
-  failing on hard samples. All eight reached 100%.
+  failing on hard samples. All nine reached 100%.
 
 ### Systems under test
 
@@ -87,6 +88,7 @@ Details, controls, and a scoring caveat:
 | `sarvam_saaras_v4` | Sarvam Saaras v4 | Speech-to-Text API, `en-IN` |
 | `smallest_pulse_pro` | Smallest.ai Pulse Pro | Speech-to-Text API, English |
 | `smallest_pulse` | Smallest.ai Pulse | Speech-to-Text API, English |
+| `deepgram_nova3` | Deepgram Nova-3 | Speech-to-Text API, English |
 
 All four local backends share the same runtime version, server mode, thread
 count, CPU backend, prepared WAVs, warm-up rule, and timing boundary.
@@ -94,7 +96,7 @@ count, CPU backend, prepared WAVs, warm-up rule, and timing boundary.
 ### Model provenance
 
 Checked against official model cards and provider documentation on
-**2026-08-13**. "Artifact size" is the exact quantized file evaluated locally,
+**2026-08-13**, and **2026-08-19** for Deepgram. "Artifact size" is the exact quantized file evaluated locally,
 not peak RAM. Where a field is undisclosed, no estimate was substituted.
 
 | System | Access / license | Parameters | Evaluated artifact | Published training background |
@@ -107,9 +109,10 @@ not peak RAM. Where a field is undisclosed, no estimate was substituted.
 | Smallest.ai Pulse | Proprietary hosted API | Not disclosed | Not available | Not publicly disclosed |
 | Smallest.ai Pulse Pro | Proprietary hosted API | Not disclosed | Not available | Not publicly disclosed |
 | Sarvam Saaras v4 | Proprietary hosted API | Not disclosed | Not available | No v4-specific disclosure found |
+| Deepgram Nova-3 | Proprietary hosted API | Not disclosed | Not available | Not publicly disclosed |
 
 Sources for each row are in
-[`interpretation.md`](results/comparisons/v0823-eight-system/interpretation.md).
+[`interpretation.md`](results/comparisons/v0823-nine-system/interpretation.md).
 
 ---
 
@@ -310,7 +313,7 @@ without re-running anything:
 ```bash
 python -c "
 import json, hashlib, pathlib
-m = json.load(open('results/comparisons/v0823-eight-system/comparison_manifest.json'))
+m = json.load(open('results/comparisons/v0823-nine-system/comparison_manifest.json'))
 for s in m['source_runs']:
     p = pathlib.Path(s['path'])
     for f, k in [('run_manifest.json', 'run_manifest_sha256'),
@@ -320,8 +323,8 @@ for s in m['source_runs']:
 "
 ```
 
-On the committed artifacts this verifies 16 hashes across 8 source runs with
-zero mismatches (8 backends × 200 utterances = 1,600 scored rows).
+On the committed artifacts this verifies 18 hashes across 9 source runs with
+zero mismatches (9 backends × 200 utterances = 1,800 scored rows).
 
 ---
 

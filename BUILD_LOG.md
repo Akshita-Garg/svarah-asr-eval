@@ -1261,3 +1261,50 @@ float-to-PCM_16 rounding done when writing the file. That value is identical for
 the 16 affected rows and the 184 unaffected ones, so nothing distinguishes the
 affected audio. Standard Pulse returns clean Latin English from the
 byte-identical file.
+
+---
+
+## Phase 28 - Deepgram Nova-3 evaluation  `[SCRIPTED]`
+
+### Backend
+
+`voicerefine_eval/backends/deepgram.py` follows the same shape as the other
+pre-recorded cloud backends: raw 16 kHz mono WAV bytes posted to
+`https://api.deepgram.com/v1/listen` with `Authorization: Token <key>` and
+`Content-Type: audio/wav`, retry with jittered exponential backoff on 429 and
+5xx, terminal on other 4xx. The transcript is read from
+`results.channels[0].alternatives[0].transcript`, and an unexpected response
+shape raises `bad_response` rather than returning a silently empty string.
+
+Configuration: `model=nova-3`, `language=en`, `punctuate=true`,
+`smart_format=false`.
+
+**Why `smart_format` is off.** It rewrites numbers, currency and dates. Whisper's
+`EnglishTextNormalizer` already performs number standardisation, so enabling it
+would put Deepgram through two formatting passes where every other system gets
+one. Leaving it off keeps the normalizer as the single formatting stage. The
+setting is recorded in the cache signature and the run manifest, so the choice
+is inspectable and changing it invalidates cached transcripts.
+
+Seven unit tests cover the request contract, the bool-to-string query encoding,
+the response-shape guard, retry on 5xx, no-retry on 401, and key absence.
+
+### Gate and run
+
+The five-recording gate passed 5/5. The full run completed **200/200 with zero
+failures**, every row on the first attempt, and needed no request pacing — no
+429 responses were observed, unlike the Smallest.ai runs.
+
+Corpus WER **0.0762**, aggregate RTF **0.441**, wall clock 7.4 minutes.
+
+### Result
+
+Sixth of nine, inside 0.001 corpus WER of ElevenLabs Scribe v2 and Smallest.ai
+Pulse (both 0.0752). At 2,074 reference words that gap is about two word errors,
+so the three are tied rather than ranked on this subset. Mean per-utterance WER
+of 0.1349 is second lowest overall, indicating errors spread evenly rather than
+concentrated in a few catastrophic rows. Output was Latin-script on all 200 rows.
+
+The nine-system merge is in `results/comparisons/v0823-nine-system/`; the
+eight-system comparison is retained unchanged as a dated artifact. Re-verified
+the merged hash chain: 18 hashes across 9 source runs, zero mismatches.

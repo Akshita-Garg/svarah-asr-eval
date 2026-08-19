@@ -32,6 +32,10 @@ def build_backend(cfg: BackendConfig) -> ASRBackend:
         from .smallest import SmallestBackend
 
         return SmallestBackend(cfg)
+    if cfg.type == "deepgram":
+        from .deepgram import DeepgramBackend
+
+        return DeepgramBackend(cfg)
     raise ValueError(f"Unknown backend type: {cfg.type!r} for {cfg.backend_id}")
 
 

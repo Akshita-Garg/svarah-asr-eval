@@ -213,3 +213,19 @@ max_retries = 5
 backoff_base_seconds = 1.0
 backoff_max_seconds = 30.0
 request_timeout_seconds = 300
+
+# --- Cloud: Deepgram Nova-3 pre-recorded ------------------------------------
+[backends.deepgram_nova3]
+type = "deepgram"
+model = "nova-3"
+language = "en"
+# API key comes from env DEEPGRAM_API_KEY (never stored in this file).
+base_url = "https://api.deepgram.com/v1/listen"
+punctuate = true
+# smart_format rewrites numbers, currency and dates. Left off so the Whisper
+# normalizer remains the only formatting pass, as for every other backend.
+smart_format = false
+max_retries = 5
+backoff_base_seconds = 1.0
+backoff_max_seconds = 30.0
+request_timeout_seconds = 300
