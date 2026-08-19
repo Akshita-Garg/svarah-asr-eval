@@ -134,10 +134,8 @@ each one bounds how far the numbers above can be carried.
   laptop dictation, and short command utterances make per-utterance WER
   volatile — a single wrong word on a one-word reference scores 1.0.
 - **Batch transcription only.** Every system received a complete WAV and
-  returned a final transcript. No streaming or partial-hypothesis path was
-  tested, which is the mode a live dictation product actually uses. This
-  particularly understates systems designed for streaming — Smallest.ai
-  documents Pulse as a streaming model, and it was measured in batch mode.
+  returned a final transcript. Streaming and partial-hypothesis decoding were
+  not measured, and that is the mode a live dictation product would use.
 - **No end-to-end product measurement.** The timed window covers the backend
   call only. Audio capture, conversion, cleanup, optional transformation, and
   text insertion are all excluded.
