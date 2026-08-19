@@ -96,8 +96,9 @@ count, CPU backend, prepared WAVs, warm-up rule, and timing boundary.
 ### Model provenance
 
 Checked against official model cards and provider documentation on
-**2026-08-13**, and **2026-08-19** for Deepgram. "Artifact size" is the exact quantized file evaluated locally,
-not peak RAM. Where a field is undisclosed, no estimate was substituted.
+**2026-08-13**, and **2026-08-19** for Deepgram and Sarvam. "Artifact size" is
+the exact quantized file evaluated locally, not peak RAM. Where a field is
+undisclosed, no estimate was substituted.
 
 | System | Access / license | Parameters | Evaluated artifact | Published training background |
 | --- | --- | ---: | ---: | --- |
@@ -108,7 +109,7 @@ not peak RAM. Where a field is undisclosed, no estimate was substituted.
 | ElevenLabs Scribe v2 | Proprietary hosted API | Not disclosed | Not available | Not publicly disclosed |
 | Smallest.ai Pulse | Proprietary hosted API | Not disclosed | Not available | Not publicly disclosed |
 | Smallest.ai Pulse Pro | Proprietary hosted API | Not disclosed | Not available | Not publicly disclosed |
-| Sarvam Saaras v4 | Proprietary hosted API | Not disclosed | Not available | No v4-specific disclosure found |
+| Sarvam Saaras v4 | Proprietary hosted API | Not disclosed | Not available | Language coverage documented; corpus, hours and architecture not disclosed |
 | Deepgram Nova-3 | Proprietary hosted API | Not disclosed | Not available | Not publicly disclosed |
 
 Sources for each row are in
