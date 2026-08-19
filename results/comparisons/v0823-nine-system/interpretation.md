@@ -69,6 +69,88 @@ corpus WER reported here.
 
 Source: [Deepgram models overview](https://developers.deepgram.com/docs/models-languages-overview).
 
+## Results by utterance duration
+
+Corpus WER within each duration band (band edits / band reference words).
+The subset spans 0.14 s to 26.61 s, median 4.13 s, so a single aggregate
+figure averages over very different speech.
+
+| Band | Utterances | Reference words | Share of corpus |
+| --- | ---: | ---: | ---: |
+| <1 s | 50 | 61 | 2.9% |
+| 1-3 s | 26 | 133 | 6.4% |
+| 3-6 s | 60 | 632 | 30.5% |
+| >6 s | 64 | 1248 | 60.2% |
+
+Note the imbalance: sub-second utterances are a quarter of the row count but
+under 3% of the reference words, so they barely move corpus WER while
+dominating any per-utterance mean.
+
+| System | <1 s | 1-3 s | 3-6 s | >6 s | Shorter half | Longer half |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Sarvam Saaras v4 | 0.1311 | 0.0752 | 0.0364 | 0.0312 | 0.0543 | 0.0348 |
+| Cohere Transcribe Q4_K | 0.3279 | 0.1429 | 0.0585 | 0.0593 | 0.1210 | 0.0605 |
+| Whisper Medium English Q4_K | 0.2459 | 0.1203 | 0.0649 | 0.0633 | 0.0963 | 0.0671 |
+| ElevenLabs Scribe v2 | 0.3443 | 0.1203 | 0.0759 | 0.0569 | 0.1136 | 0.0659 |
+| Smallest.ai Pulse | 0.4098 | 0.0977 | 0.0680 | 0.0601 | 0.1136 | 0.0659 |
+| Deepgram Nova-3 | 0.2295 | 0.1278 | 0.0791 | 0.0617 | 0.1086 | 0.0683 |
+| Parakeet TDT 0.6B v3 Q4_K | 0.3607 | 0.1805 | 0.0665 | 0.0673 | 0.1358 | 0.0701 |
+| Smallest.ai Pulse Pro | 0.3607 | 0.2105 | 0.1266 | 0.0641 | 0.1383 | 0.0923 |
+| Whisper Base English Q4_K | 0.2787 | 0.1429 | 0.1203 | 0.1002 | 0.1383 | 0.1084 |
+
+Halves split at the median duration (4.13 s): 405 reference words in
+the shorter half, 1669 in the longer. Rows are ordered by overall corpus WER.
+
+### What the bands show
+
+**The three-way tie at 0.075 is not a tie.** ElevenLabs Scribe v2, Smallest.ai
+Pulse and Deepgram Nova-3 sit within 0.001 corpus WER overall, but they are not
+the same system. On sub-second utterances Deepgram scores 0.2295 against
+ElevenLabs' 0.3443 and Pulse's 0.4098. Above six seconds the order reverses and
+Deepgram is the weakest of the three (0.0617 against 0.0569 and 0.0601). A
+single aggregate number averages that difference away entirely.
+
+For a product decision this is the part that matters: these three are
+interchangeable on paper and clearly not interchangeable in use. Short-command
+input favours Deepgram; sustained dictation favours ElevenLabs or Pulse.
+
+**Every system degrades sharply on short audio.** Corpus WER in the sub-second
+band is between 2.8x and 6.8x the same system's figure above six seconds -
+without exception, local and hosted, small and large. Smallest.ai Pulse shows
+the widest gap (6.8x) and Whisper Base the narrowest (2.8x), the latter only
+because its long-form accuracy is already the weakest in the comparison.
+
+Short utterances offer no surrounding context to recover from, and a single wrong word on a one-word
+reference scores 1.0. Any product whose real traffic is dominated by short
+commands should expect materially worse accuracy than an aggregate benchmark
+figure implies.
+
+**Sarvam's lead holds in every band.** It is the most accurate system in all
+four duration bands and in both halves, so its overall margin is not an artifact
+of one length regime. This is the strongest single piece of evidence in the
+comparison.
+
+**Whisper Base is the clearest capacity story.** It is mid-pack on short audio
+(0.2787, fourth) but last by a wide margin above six seconds (0.1002). Its
+weakness is sustained transcription rather than short-utterance robustness.
+
+### Caveats on these bands
+
+- **The sub-second band is small.** 50 utterances but only **61 reference
+  words**, 2.9% of the corpus. A handful of errors moves that column by several
+  points, so it is directional rather than precise. The 3-6 s (632 words) and
+  >6 s (1,248 words) bands carry the weight and are the reliable columns.
+- **Pulse Pro's short-band figure is confounded by its output-script issue.**
+  Eight of the sixteen Devanagari rows are under one second, and they account
+  for **55% of Pulse Pro's sub-second errors**. Its 0.3607 in that column is
+  substantially the script defect reappearing, not an independent finding about
+  short-audio handling.
+- **Band membership is fixed by the audio, not the system**, so every system is
+  scored on exactly the same utterances within each band. The bands are
+  comparable across systems even where they are small.
+- These are the same runs as the headline table, re-aggregated. No system was
+  re-run and no transcript changed.
+
 ## What the ninth system changes
 
 Nothing about the existing ordering. Deepgram slots into the dense band between
