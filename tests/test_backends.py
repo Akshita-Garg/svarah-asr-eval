@@ -8,6 +8,7 @@ from voicerefine_eval.backends.base import TranscriptionError
 from voicerefine_eval.backends.parakeet_crispasr import CrispAsrServerBackend
 from voicerefine_eval.backends.sarvam import SarvamBackend
 from voicerefine_eval.backends.deepgram import DeepgramBackend
+from voicerefine_eval.backends.gnani import GnaniBackend
 from voicerefine_eval.backends.smallest import SmallestBackend
 from voicerefine_eval.config import BackendConfig, load_config
 
@@ -441,3 +442,127 @@ def test_deepgram_unavailable_without_key(monkeypatch):
 
 def test_build_backend_constructs_deepgram():
     assert isinstance(build_backend(_deepgram_config()), DeepgramBackend)
+
+
+def _gnani_config(**overrides) -> BackendConfig:
+    settings = {
+        "model_label": "prisma-v2.5",
+        "language_code": "en-IN",
+        "base_url": "https://api.vachana.ai/stt/v3",
+        "output_format": "verbatim",
+        "max_retries": 2,
+        "backoff_base_seconds": 0,
+    }
+    settings.update(overrides)
+    return BackendConfig("gnani_prisma_v25", "gnani", settings)
+
+
+def test_gnani_sends_expected_request_without_leaking_key(tmp_path, monkeypatch):
+    audio = tmp_path / "audio.wav"
+    audio.write_bytes(b"wav")
+    monkeypatch.setenv("GNANI_API_KEY", "secret-key")
+    captured = {}
+
+    def fake_post(url, **kwargs):
+        captured.update(url=url, **kwargs)
+        return _Response(payload={"success": True, "transcript": "  hello world  "})
+
+    monkeypatch.setattr("voicerefine_eval.backends.gnani.requests.post", fake_post)
+    backend = GnaniBackend(_gnani_config())
+    backend.start()
+
+    assert backend.transcribe(audio) == "hello world"
+    assert captured["url"] == "https://api.vachana.ai/stt/v3"
+    assert captured["headers"]["X-API-Key-ID"] == "secret-key"
+    assert captured["data"]["language_code"] == "en-IN"
+    assert captured["data"]["format"] == "verbatim"
+    # Audio goes as multipart under the documented field name.
+    assert captured["files"]["audio_file"][0] == "recording.wav"
+    assert captured["files"]["audio_file"][1] == b"wav"
+    assert "secret-key" not in str(backend.cache_signature())
+
+
+def test_gnani_never_sends_model_label_as_a_parameter(tmp_path, monkeypatch):
+    """The endpoint has no model selector; the label is provenance only."""
+    audio = tmp_path / "audio.wav"
+    audio.write_bytes(b"wav")
+    monkeypatch.setenv("GNANI_API_KEY", "secret-key")
+    captured = {}
+
+    def fake_post(url, **kwargs):
+        captured.update(**kwargs)
+        return _Response(payload={"transcript": "ok"})
+
+    monkeypatch.setattr("voicerefine_eval.backends.gnani.requests.post", fake_post)
+    backend = GnaniBackend(_gnani_config())
+    backend.start()
+    backend.transcribe(audio)
+
+    assert "model" not in captured["data"]
+    assert "model_label" not in captured["data"]
+    # ...but it must stay in the cache signature so a relabel invalidates cache.
+    assert backend.cache_signature()["model_label"] == "prisma-v2.5"
+
+
+def test_gnani_rejects_missing_transcript(tmp_path, monkeypatch):
+    audio = tmp_path / "audio.wav"
+    audio.write_bytes(b"wav")
+    monkeypatch.setenv("GNANI_API_KEY", "secret-key")
+    monkeypatch.setattr(
+        "voicerefine_eval.backends.gnani.requests.post",
+        lambda *a, **k: _Response(payload={"success": True}),
+    )
+    backend = GnaniBackend(_gnani_config())
+    backend.start()
+
+    with pytest.raises(TranscriptionError) as excinfo:
+        backend.transcribe(audio)
+    assert excinfo.value.category == "bad_response"
+
+
+def test_gnani_retries_transient_server_error(tmp_path, monkeypatch):
+    audio = tmp_path / "audio.wav"
+    audio.write_bytes(b"wav")
+    monkeypatch.setenv("GNANI_API_KEY", "secret-key")
+    responses = iter([
+        _Response(status_code=502, text="bad gateway"),
+        _Response(payload={"transcript": "recovered"}),
+    ])
+    monkeypatch.setattr(
+        "voicerefine_eval.backends.gnani.requests.post",
+        lambda *a, **k: next(responses),
+    )
+    backend = GnaniBackend(_gnani_config())
+    backend.start()
+
+    assert backend.transcribe(audio) == "recovered"
+    assert backend.last_attempts == 2
+
+
+def test_gnani_does_not_retry_terminal_auth_failure(tmp_path, monkeypatch):
+    audio = tmp_path / "audio.wav"
+    audio.write_bytes(b"wav")
+    monkeypatch.setenv("GNANI_API_KEY", "secret-key")
+    calls = {"n": 0}
+
+    def fake_post(*a, **k):
+        calls["n"] += 1
+        return _Response(status_code=403, text="forbidden")
+
+    monkeypatch.setattr("voicerefine_eval.backends.gnani.requests.post", fake_post)
+    backend = GnaniBackend(_gnani_config())
+    backend.start()
+
+    with pytest.raises(TranscriptionError) as excinfo:
+        backend.transcribe(audio)
+    assert excinfo.value.category == "http_403"
+    assert calls["n"] == 1
+
+
+def test_gnani_unavailable_without_key(monkeypatch):
+    monkeypatch.delenv("GNANI_API_KEY", raising=False)
+    assert GnaniBackend(_gnani_config()).is_available() is False
+
+
+def test_build_backend_constructs_gnani():
+    assert isinstance(build_backend(_gnani_config()), GnaniBackend)

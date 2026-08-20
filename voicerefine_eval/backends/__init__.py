@@ -36,6 +36,10 @@ def build_backend(cfg: BackendConfig) -> ASRBackend:
         from .deepgram import DeepgramBackend
 
         return DeepgramBackend(cfg)
+    if cfg.type == "gnani":
+        from .gnani import GnaniBackend
+
+        return GnaniBackend(cfg)
     raise ValueError(f"Unknown backend type: {cfg.type!r} for {cfg.backend_id}")
 
 

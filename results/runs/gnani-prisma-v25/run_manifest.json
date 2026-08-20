@@ -1,0 +1,63 @@
+{
+  "git": {
+    "commit": "b6d276eb23bc90e35043125249d5b8bab1183836",
+    "dirty": true
+  },
+  "dataset": {
+    "name": "ai4bharat/Svarah",
+    "revision": "ebbf7777fe771490696a3f7b007097606fa8c924",
+    "split": "test",
+    "seed": 42,
+    "subset_size": 200,
+    "debug": false,
+    "subset_manifest_sha256": "f9354148a0aaa05ee9afe003d22668a47fdf6bc40a73875af04b504ff3a66f00"
+  },
+  "python": {
+    "version": "3.12.13",
+    "implementation": "CPython"
+  },
+  "dependencies": {
+    "datasets": "5.0.1",
+    "jiwer": "4.0.0",
+    "numpy": "2.5.2",
+    "sherpa-onnx": "1.13.4",
+    "sherpa-onnx-core": "1.13.4",
+    "soundfile": "0.14.0",
+    "soxr": "1.1.0",
+    "whisper-normalizer": "0.1.15",
+    "requests": "2.34.2"
+  },
+  "platform": {
+    "system": "Windows",
+    "release": "11",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 140 Stepping 1, GenuineIntel",
+    "cpu_count": 8
+  },
+  "backends": {
+    "gnani_prisma_v25": {
+      "backend_id": "gnani_prisma_v25",
+      "type": "gnani",
+      "model_label": "prisma-v2.5",
+      "language_code": "en-IN",
+      "format": "verbatim",
+      "base_url": "https://api.vachana.ai/stt/v3",
+      "input": "multipart_audio_file"
+    }
+  },
+  "backend_summaries": {
+    "gnani_prisma_v25": {
+      "available": true,
+      "startup_seconds": 2.700020559132099e-06,
+      "success_count": 200,
+      "failure_count": 0
+    }
+  },
+  "timing": {
+    "started_at": "2026-08-20T03:54:39.645977+00:00",
+    "completed_at": "2026-08-20T03:57:09.305782+00:00"
+  },
+  "cache": {
+    "enabled": false
+  }
+}

@@ -1308,3 +1308,59 @@ concentrated in a few catastrophic rows. Output was Latin-script on all 200 rows
 The nine-system merge is in `results/comparisons/v0823-nine-system/`; the
 eight-system comparison is retained unchanged as a dated artifact. Re-verified
 the merged hash chain: 18 hashes across 9 source runs, zero mismatches.
+
+---
+
+## Phase 29 - Gnani Prisma v2.5 evaluation  `[SCRIPTED]`
+
+### Backend
+
+`voicerefine_eval/backends/gnani.py` posts multipart `audio_file` to
+`https://api.vachana.ai/stt/v3` with the `X-API-Key-ID` header, reading the
+transcript from the response's `transcript` field. Retry with jittered
+exponential backoff on 429 and 5xx, terminal on other 4xx.
+
+Configuration: `language_code=en-IN`, `format=verbatim`.
+
+The endpoint takes no model-selection parameter; the served model follows from
+the API key, which is issued against Prisma v2.5. `model_label` is recorded in
+the run manifest and cache signature for provenance and is never sent as a
+request parameter - a dedicated test asserts that.
+
+**Why `format=verbatim`.** The alternative, `transcribe`, applies Gnani's own
+formatting including optional native-numeral ITN. Verbatim keeps Whisper's
+`EnglishTextNormalizer` as the single formatting pass, matching the
+`smart_format=false` decision for Deepgram.
+
+Seven unit tests cover the request contract, the multipart field name, the
+model-label-is-not-a-parameter guarantee, the missing-transcript guard, retry on
+5xx, no-retry on 403, and key absence.
+
+### Gate and run
+
+The five-recording gate passed 5/5. The full run completed **200/200 with zero
+failures**, every row on the first attempt, and needed no request pacing.
+
+Corpus WER **0.0733**, aggregate RTF **0.147**. Latin script on all 200 rows.
+
+### Result
+
+Fourth of ten overall and the second most accurate hosted API after Sarvam,
+ahead of ElevenLabs, both Smallest.ai models and Deepgram. Sarvam is not
+displaced - it is both more accurate (0.0386) and slightly faster (0.122). The
+only other systems more accurate than Gnani are Cohere and Whisper Medium,
+local models running 12.5x and 15.1x slower.
+
+Its duration profile is the most lopsided in the comparison: ninth of ten on
+sub-second audio (0.3607) but second best on 1-3 s utterances (0.0902), roughly
+the mirror image of Deepgram.
+
+Gnani's published claims of lower WER than Sarvam are not in conflict with this
+result: they compare against Saaras **v3**, on Hindi and Dravidian languages, on
+noisy 8 kHz telephony audio, using Gramvaani. This benchmark measures
+Indian-accented English at 16 kHz on Svarah against Saaras v4. Neither speaks to
+the other, and the interpretation says so explicitly.
+
+The ten-system merge is in `results/comparisons/v0823-ten-system/`; earlier
+comparisons are retained unchanged as dated artifacts. Re-verified the merged
+hash chain: 20 hashes across 10 source runs, zero mismatches.

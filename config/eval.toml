@@ -229,3 +229,20 @@ max_retries = 5
 backoff_base_seconds = 1.0
 backoff_max_seconds = 30.0
 request_timeout_seconds = 300
+
+# --- Cloud: Gnani speech-to-text (Vachana REST) -----------------------------
+# The endpoint takes no model-selection parameter: the served model follows
+# from the API key, which is issued against Prisma v2.5. `model_label` is
+# recorded for provenance only; it is never sent as a request parameter.
+[backends.gnani_prisma_v25]
+type = "gnani"
+model_label = "prisma-v2.5"
+language_code = "en-IN"
+# API key comes from env GNANI_API_KEY (never stored in this file).
+base_url = "https://api.vachana.ai/stt/v3"
+# `verbatim` keeps the Whisper normalizer as the only formatting pass.
+output_format = "verbatim"
+max_retries = 5
+backoff_base_seconds = 1.0
+backoff_max_seconds = 30.0
+request_timeout_seconds = 300
